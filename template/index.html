@@ -59,7 +59,6 @@
                             <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
                                 <h4>Make a Post</h4>
                             </div>
-    
                             <!-- notification contents -->
                              
                             <div class="flex justify-center flex-center text-center">
@@ -264,14 +263,13 @@
                             
                             </div>
 
-
-    
+                            {% if post.image %}
                             <div uk-lightbox>
                                 <a href="{{post.image.url}}">  
                                     <img src="{{post.image.url}}" alt="">
                                 </a>
                             </div>
-                            
+                            {% endif %}
     
                             <div class="py-3 px-4 space-y-3"> 
 
