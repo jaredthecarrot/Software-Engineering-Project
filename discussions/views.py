@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Thread, Comment
-from .forms import ThreadForm, CommentForm  # You’ll create these forms next
+from .forms import ThreadForm, CommentForm
 from django.contrib.auth.decorators import login_required
 
 def thread_list(request):
