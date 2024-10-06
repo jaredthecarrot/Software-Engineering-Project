@@ -25,6 +25,14 @@ def index(request):
     return render(request,'index.html', {'user_profile': user_profile, 'posts':posts})
 
 @login_required(login_url='signin')
+def profile(request):
+    user_profile = Profile.objects.get(user=request.user)
+    return render(request,'profile.html', {'user_profile': user_profile})
+    
+    
+
+
+@login_required(login_url='signin')
 def settings(request):
     user_profile = Profile.objects.get(user=request.user)
     
@@ -111,3 +119,7 @@ def signin(request):
 def logout(request):
     auth.logout(request)
     return redirect('signin')
+
+def about(request):
+    return render(request,'about.html')
+    
