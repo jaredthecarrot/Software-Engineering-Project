@@ -3,7 +3,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Light gray background */
+    background-color: #a31a1a; /* Light gray background */
 }
 
 .container {
@@ -19,13 +19,13 @@ h1, h2 {
 
 p {
     line-height: 1.6;
-    color: #555; /* Dark gray for paragraphs */
+    color: #47e708; /* Dark gray for paragraphs */
 }
 
 /* Header */
 .header {
     background-color: #800000; /* Maroon background */
-    color: #f0f0f0; /* Light gray text */
+    color: #550bdf; /* Light gray text */
     text-align: center;
     padding: 20px;
     border-radius: 8px;
@@ -33,7 +33,7 @@ p {
 
 /* About Section */
 .about-section {
-    background-color: #ffffff; /* White background for the section */
+    background-color: #15cffd; /* White background for the section */
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -54,7 +54,7 @@ p {
     text-align: center;
     padding: 15px 0;
     background-color: #800000; /* Maroon background */
-    color: #f0f0f0; /* Light gray text */
+    color: #109fd8; /* Light gray text */
     margin-top: 40px;
     border-radius: 8px;
 }
@@ -62,7 +62,7 @@ p {
 /* Back Button */
 .back-button {
     display: inline-block;
-    background-color: #555; /* Dark gray background */
+    background-color: #ec0a0a; /* Dark gray background */
     color: #fff; /* White text */
     padding: 10px 15px;
     border-radius: 5px;

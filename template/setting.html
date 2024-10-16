@@ -16,64 +16,112 @@
 
 </head>
 
-<body>
+<body>    
 
-
-       
-
-          
-
-            <div class="container m-auto"> 
-
-                <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Settings for <b>{{user.username}}</b> </h1>
-                <!-- <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
-                    <li class="uk-active"><a href="#">General</a></li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Privacy</a></li>
-                    <li><a href="#">Notification</a></li>
-                    <li><a href="#">Social links</a></li>
-                    <li><a href="#">Billing</a></li>
-                    <li><a href="#">Security</a></li>
-                </ul> -->
-                <br>
-                <hr>
-
-
-                 <form action="" method="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}
-                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+    <body>
+        <div class="container mx-auto p-6">
+            <h1 class="text-3xl font-bold text-gray-800 tracking-tight mt-6 mb-4">
+                <a href="/" class="text-blue-600 hover:underline">Home</a> / Account Settings for <b>admin123</b>
+            </h1>
+    
+            <nav class="mt-5 flex space-x-4 text-sm text-gray-600">
+                <a href="#" class="hover:text-blue-600">General</a>
+                <a href="#" class="hover:text-blue-600">Profile</a>
+                <a href="#" class="hover:text-blue-600">Privacy</a>
+                <a href="#" class="hover:text-blue-600">Notification</a>
+                <a href="#" class="hover:text-blue-600">Social links</a>
+                <a href="#" class="hover:text-blue-600">Billing</a>
+                <a href="#" class="hover:text-blue-600">Security</a>
+            </nav>
+    
+            <hr class="my-4 border-gray-300">
+    
+            <form action="" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="csrfmiddlewaretoken" value="dsF6k5aPYUWIpLzM4tUML2YpkMQUcnMPGiE80pKZ9sSaQurXVuC6HJXM03QlcXqT">
+    
+                <div class="grid lg:grid-cols-3 gap-8">
                     <div>
-                        <h3 class="text-xl mb-2"> General</h3>
-                        <p></p>
+                        <h3 class="text-2xl font-semibold mb-4">General</h3>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                    <div class="bg-white rounded-lg shadow-md p-6 col-span-2">
+                        <div class="grid grid-cols-1 gap-4">
     
-                       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-
-                            <div class="col-span-2">
-                                <label for=""> Profile Image</label>
-                                <img width="100" height="100" src="{{user_profile.profileimg.url}}"/>
-                                <input type="file" name ="image" value="" class="shadow-none bg-gray-100">
+                            <div class="flex items-center space-x-4">
+                                <label class="text-gray-600 font-medium">Profile Image</label>
+                                <img class="rounded-full border border-gray-300" width="100" height="100" src="/media/blank_profile_picture.avif" alt="Profile Image"/>
+                                <input type="file" name="image" class="mt-2 file:mr-2 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             </div>
-                            <div class="col-span-2">
-                                <label for="about">Bio</label>  
-                                <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
-                            </div> 
-                            <div class="col-span-2">
-                                <label for=""> Location</label>
-                                <input type="text" name ="location"placeholder="" value = "{{user_profile.location}}" class="shadow-none bg-gray-100">
+    
+                            <div>
+                                <label for="first_name" class="block text-gray-600 font-medium">First Name</label>
+                                <input type="text" name="first_name" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your first name">
                             </div>
-                       </div> 
     
-                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
-                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> <a href="/">Cancel </button>
-                           <button type="submit" class="button bg-blue-700"> Save </button>
-                       </div>
-                      </form>
+                            <div>
+                                <label for="last_name" class="block text-gray-600 font-medium">Last Name</label>
+                                <input type="text" name="last_name" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your last name">
+                            </div>
     
+                            <div>
+                                <label for="gender" class="block text-gray-600 font-medium">Gender</label>
+                                <select name="gender" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                                    <option value="">Select your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+    
+                            <div>
+                                <label for="dob" class="block text-gray-600 font-medium">Date of Birth</label>
+                                <input type="date" name="dob" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                            </div>
+    
+                            <div>
+                                <label for="age" class="block text-gray-600 font-medium">Age</label>
+                                <input type="number" name="age" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your age">
+                            </div>
+    
+                            <div>
+                                <label for="email" class="block text-gray-600 font-medium">Email</label>
+                                <input type="email" name="email" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your email address">
+                            </div>
+    
+                            <div>
+                                <label for="phone" class="block text-gray-600 font-medium">Phone</label>
+                                <input type="tel" name="phone" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your phone number">
+                            </div>
+    
+                            <div>
+                                <label for="about" class="block text-gray-600 font-medium">Bio</label>
+                                <textarea id="about" name="bio" rows="4" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Tell us about yourself"></textarea>
+                            </div>
+    
+                            <div>
+                                <label for="location" class="block text-gray-600 font-medium">Location</label>
+                                <input type="text" name="location" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter your location">
+                            </div>
+    
+                            <div>
+                                <label for="theme" class="block text-gray-600 font-medium">Theme</label>
+                                <select name="theme" class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="flex justify-end mt-6 space-x-4">
+                            <a href="/" class="py-2 px-4 bg-gray-100 text-red-500 rounded hover:bg-gray-200">Cancel</a>
+                            <button type="submit" class="py-2 px-6 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
                     </div>
-                
-
+                </div>
+            </form>
+        </div>
+    </body>
+    
                     <!-- <div>
                         <h3 class="text-xl mb-2"> Privacy</h3>
                         <p> </p>
