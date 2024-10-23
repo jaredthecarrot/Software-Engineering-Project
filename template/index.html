@@ -304,7 +304,7 @@
                                         </div>
                                         
                                     </a>
-                                    <a href="#" class="flex items-center space-x-2">
+                                    <a href="#" class="flex items-center space-x-2 toggle-comments" onclick="toggleComments(event, '{{ post.id }}')">
                                         <div class="p-2 rounded-full text-black">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
                                                 <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
@@ -351,6 +351,35 @@
                                     </div>
                                 </div> -->
     
+                            </div>
+
+                            <!-- Comment Section -->
+                            <!-- Comment Section -->
+                            <div class="border-t pt-4 space-y-4 comments-section-{{ post.id }}" style="display: none;">
+                                {% for comment in post.comments.all %}
+                                <div class="flex">
+                                    <div class="w-10 h-10 rounded-full relative flex-shrink-0">
+                                        <img src="{{ comment.user.profile.profileimg.url }}" alt="" class="absolute h-full rounded-full w-full">
+                                    </div>
+                                    <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 h-full relative lg:ml-5 ml-2 lg:mr-20">
+                                        <p class="leading-6"><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                                        <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45"></div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <p>No comments yet.</p>
+                                {% endfor %}
+                                
+                                <!-- Comment Input -->
+                                <div class="bg-gray-100 rounded-md relative">
+                                    <form method="POST" action="{% url 'add-post-comment' post.id %}">
+                                        {% csrf_token %}
+                                        <input type="text" name="comment" placeholder="Post a comment" class="bg-transparent max-h-10 shadow-none w-full px-3 py-2 rounded-md">
+                                        <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
+                                            <button type="submit" class="text-black"><i class="uil uil-paper-plane"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
     
                         </div>
@@ -455,6 +484,18 @@
     <script src="{% static 'assets/js/uikit.js' %}"></script>
     <script src="{% static 'assets/js/simplebar.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
+
+    <script>
+        function toggleComments(event, postId) {
+            event.preventDefault(); // Prevent default link behavior
+            const commentsSection = document.querySelector(`.comments-section-${postId}`);
+            if (commentsSection.style.display === "none" || commentsSection.style.display === "") {
+                commentsSection.style.display = "block"; // Show the comments section
+            } else {
+                commentsSection.style.display = "none"; // Hide the comments section
+            }
+        }
+    </script>
 
 
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>

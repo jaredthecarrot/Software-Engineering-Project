@@ -31,10 +31,10 @@ class LikePost(models.Model):
 
 
 class PostComment(models.Model):
-    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)  # Link to Post model
+    post= models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)  # Link to Post model
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to User model
     content = models.TextField()  # The comment text
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set to now when created
+    created_at = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return f"Comment by {self.user.username} on {self.post.id}"
+        return f"Comment by {self.user.username} on {self.post.id} : {self.post.user} post. "
