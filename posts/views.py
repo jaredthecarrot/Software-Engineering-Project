@@ -1,8 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Post, LikePost
-from django.shortcuts import redirect
 
 
 
@@ -45,3 +44,21 @@ def like_post(request):
         post.no_of_likes = post.no_of_likes-1
         post.save()
         return redirect('/')
+    
+
+def add_comment(request, post_id):
+    
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)  # Get the post
+        user = request.user
+        comment_content = request.POST.get('comment')  # Get the comment content from the form
+        
+        if comment_content:  # Check if the comment is not empty
+            # Create and save the comment
+            PostComment.objects.create(post=post, user=user, content=comment_content)
+        return redirect('/')  # Redirect to post detail page or main page
+    
+    else:
+        return redirect('/')
+
+    
