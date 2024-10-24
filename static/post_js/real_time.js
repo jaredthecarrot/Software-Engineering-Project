@@ -1,6 +1,5 @@
-// JavaScript file (e.g., script.js)
+// This file should be included in your HTML after the jQuery script tag
 
-// Function to toggle the visibility of the comments section
 function toggleComments(event, postId) {
     event.preventDefault(); // Prevent default link behavior
     const commentsSection = document.querySelector(`.comments-section-${postId}`);
@@ -16,16 +15,14 @@ $(document).ready(function() {
         e.preventDefault();
 
         var post_id = $(this).data('post-id');
-        var csrf_token = "{{ csrf_token }}";  // Keep the CSRF token here
-        // Use the rendered likePostUrl
-        var url = likePostUrl;
+        var url = likePostUrl;  // This will be defined in the HTML
 
         $.ajax({
             type: 'POST',
             url: url,
             data: {
                 'post_id': post_id,
-                'csrfmiddlewaretoken': csrf_token
+                'csrfmiddlewaretoken': csrf_token  // This will also be defined in the HTML
             },
             success: function(response) {
                 var likeCountElement = $('#like-count-' + post_id);
@@ -37,3 +34,4 @@ $(document).ready(function() {
         });
     });
 });
+

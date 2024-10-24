@@ -489,44 +489,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        // CSRF token from Django
+        // Render CSRF token and URL for like-post view
         var csrf_token = "{{ csrf_token }}";  
-
-        function toggleComments(event, postId) {
-            event.preventDefault(); // Prevent default link behavior
-            const commentsSection = document.querySelector(`.comments-section-${postId}`);
-            if (commentsSection.style.display === "none" || commentsSection.style.display === "") {
-                commentsSection.style.display = "block"; // Show the comments section
-            } else {
-                commentsSection.style.display = "none"; // Hide the comments section
-            }
-        }
-
-        $(document).ready(function() {
-            $('.like-btn').click(function(e) {
-                e.preventDefault();
-
-                var post_id = $(this).data('post-id');
-                var url = "{% url 'like-post' %}";  // Django URL for like_post
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {
-                        'post_id': post_id,
-                        'csrfmiddlewaretoken': csrf_token
-                    },
-                    success: function(response) {
-                        var likeCountElement = $('#like-count-' + post_id);
-                        likeCountElement.text('Liked by ' + response.likes_count + ' people');
-                    },
-                    error: function(xhr, errmsg, err) {
-                        console.log(xhr.status + ": " + xhr.responseText);
-                    }
-                });
-            });
-        });
+        var likePostUrl = "{% url 'like-post' %}";  // Render the URL for the like post view
     </script>
+
+    <!-- Include your new JavaScript file -->
+    <script src="{% static 'post_js/real_time.js' %}"></script>
+
+
 
 <!-- Include Ionicons -->
 <script src="{% static 'path/to/ionicons.js' %}"></script>
