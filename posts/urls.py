@@ -6,7 +6,7 @@ from uuid import UUID
 
 urlpatterns = [
     path('upload', views.upload, name='upload'),
-    path('like-post', views.like_post, name='like-post'),
+    path('like-post/', views.like_post, name='like-post'),
     path('add-post-comment/<uuid:post_id>/', views.add_comment, name='add-post-comment'),  # Change to <uuid:post_id>
 ]
 

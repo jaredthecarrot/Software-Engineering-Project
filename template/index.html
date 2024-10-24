@@ -283,27 +283,28 @@
                                             {%endif%}
                                         {% endfor %}
                                     </div>
-                                    <div class="">
-                                        {%if post.no_of_likes == 0%}
-                                            <p>No Likes</p>
-                                        {%elif post.no_of_likes == 1%}
-                                            <p>Like by {{post.no_of_likes}} person</p>
-                                        {%else%}
-                                        <p>Liked by {{post.no_of_likes}} people</p>
-                                        {% endif %}
-
+                                    <div class="like-count">
+                                        <p id="like-count-{{ post.id }}">
+                                            {% if post.no_of_likes == 0 %}
+                                                No Likes
+                                            {% elif post.no_of_likes == 1 %}
+                                                Liked by 1 person
+                                            {% else %}
+                                                Liked by {{ post.no_of_likes }} people
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                                
                                 <div class="flex space-x-4 lg:font-bold">
-                                    <a href="/like-post?post_id={{post.id}}" class="flex items-center space-x-2">
+                                    <button id="like-btn-{{ post.id }}" class="flex items-center space-x-2 like-btn" data-post-id="{{ post.id }}">
                                         <div class="p-2 rounded-full text-black">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
                                                 <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                                             </svg>
                                         </div>
-                                        
-                                    </a>
+                                    </button>
+                                    
                                     <a href="#" class="flex items-center space-x-2 toggle-comments" onclick="toggleComments(event, '{{ post.id }}')">
                                         <div class="p-2 rounded-full text-black">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
@@ -477,15 +478,20 @@
 
 
 
- <!-- Scripts
+<!-- Scripts
     ================================================== -->
-    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
-    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+
     <script src="{% static 'assets/js/uikit.js' %}"></script>
     <script src="{% static 'assets/js/simplebar.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
+    
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        // CSRF token from Django
+        var csrf_token = "{{ csrf_token }}";  
+
         function toggleComments(event, postId) {
             event.preventDefault(); // Prevent default link behavior
             const commentsSection = document.querySelector(`.comments-section-${postId}`);
@@ -495,10 +501,35 @@
                 commentsSection.style.display = "none"; // Hide the comments section
             }
         }
+
+        $(document).ready(function() {
+            $('.like-btn').click(function(e) {
+                e.preventDefault();
+
+                var post_id = $(this).data('post-id');
+                var url = "{% url 'like-post' %}";  // Django URL for like_post
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'post_id': post_id,
+                        'csrfmiddlewaretoken': csrf_token
+                    },
+                    success: function(response) {
+                        var likeCountElement = $('#like-count-' + post_id);
+                        likeCountElement.text('Liked by ' + response.likes_count + ' people');
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            });
+        });
     </script>
 
-
-    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+<!-- Include Ionicons -->
+<script src="{% static 'path/to/ionicons.js' %}"></script>
 </body>
 
 
