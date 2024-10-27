@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts',
     'core',
-    'discussions'
+    'discussions',
+    'messagingFeature'
+    
+    
 ]
 
 MIDDLEWARE = [

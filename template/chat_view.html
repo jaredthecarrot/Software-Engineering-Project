@@ -1,0 +1,48 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Messaging Chat Box</title>
+    <link rel="stylesheet" href="{% static 'css_2/chatStyles.css' %}">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header with the other person's name -->
+        <div class="chat-header">
+            <span class="online-indicator">●</span>
+            <span class="chat-title">Chat with Alex</span>
+        </div>
+
+        <!-- Chat messages area -->
+        <div class="chat-messages">
+            {% for message in chat_messages reversed%}
+            {% if message.author == user%}
+                <!-- User message -->
+                <div class="message message-sent">
+                    <p>{{message.body}}</p>
+                </div>
+             {% else %}
+                <!-- Other person message -->
+                <div class="message message-received">
+                    <p>{{message.body}}</p>
+                </div>
+            {% endif%}
+
+            {% endfor %}
+        </div>
+
+        <!-- Message input area -->
+        <div class="chat-input">
+            <form id = chat_message_form" method="POST">
+                {% csrf_token %}
+                {{form}}
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>
