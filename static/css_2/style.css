@@ -3,7 +3,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Light gray background */
+    background-color: #800000; /* Maroon background color */
 }
 
 .container {
@@ -12,9 +12,26 @@ body {
     padding: 20px;
 }
 
+/* Logo Styles */
+.logo {
+    text-align: center; /* Center logo */
+    margin-bottom: 10px; /* Space between logo and title */
+}
+
+.logo-image {
+    max-width: 100px;
+}
+
+/* Main Title with Centering and Outline */
+.main-title {
+    text-align: center; /* Centered title */
+    color: #f0f0f0;
+    text-shadow: 1px 1px 3px #555, -1px -1px 3px #000; /* Gray and black outline */
+}
+
 /* Colors */
 h1, h2 {
-    color: #800000; /* Maroon color for headings */
+    color: #dd7000; /* Maroon color for headings */
 }
 
 p {
