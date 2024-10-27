@@ -7,71 +7,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
     <title>Settings</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
-
+    <style>
+        /* Set maroon background color */
+        body {
+            background-color: #800000; /* Maroon */
+            color: #ffffff; /* White text for contrast */
+        }
+    </style>
 </head>
 
 <body>
 
+    <div class="container m-auto"> 
+        <h1 class="text-2xl leading-none tracking-tight mt-3">
+            <a href="/" class="text-white">Home</a> / Account Settings for <b>{{ user.username }}</b>
+        </h1>
+        
+        <br>
+        <hr>
 
-       
+        <form action="" method="POST" enctype="multipart/form-data"> 
+            {% csrf_token %}
+            <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                <div>
+                    <h3 class="text-xl mb-2 text-white">General</h3>
+                </div>
+                
+                <!-- Profile Settings Section -->
+                <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2 p-6">
+                    <div class="grid grid-cols-2 gap-3">
 
-          
+                        <!-- Profile Image -->
+                        <div class="col-span-2">
+                            <label for="image">Profile Image</label>
+                            <img width="100" height="100" src="{{ user_profile.profileimg.url }}" alt="Profile Image" class="mb-2">
+                            <input type="file" name="image" class="shadow-none bg-gray-100">
+                        </div>
 
-            <div class="container m-auto"> 
+                        <!-- Bio -->
+                        <div class="col-span-2">
+                            <label for="bio">Bio</label>  
+                            <textarea id="bio" name="bio" rows="3" class="shadow-none bg-gray-100">{{ user_profile.bio }}</textarea>
+                        </div> 
 
-                <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Settings for <b>{{user.username}}</b> </h1>
-                <!-- <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
-                    <li class="uk-active"><a href="#">General</a></li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Privacy</a></li>
-                    <li><a href="#">Notification</a></li>
-                    <li><a href="#">Social links</a></li>
-                    <li><a href="#">Billing</a></li>
-                    <li><a href="#">Security</a></li>
-                </ul> -->
-                <br>
-                <hr>
+                        <!-- Location -->
+                        <div class="col-span-2">
+                            <label for="location">Location</label>
+                            <input type="text" name="location" value="{{ user_profile.location }}" class="shadow-none bg-gray-100">
+                        </div>
 
+                        <!-- New Customization Fields -->
 
-                 <form action="" method="POST" enctype="multipart/form-data"> 
-                    {% csrf_token %}
-                <div class="grid lg:grid-cols-3 mt-12 gap-8">
-                    <div>
-                        <h3 class="text-xl mb-2"> General</h3>
-                        <p></p>
+                        <!-- Name -->
+                        <div class="col-span-2">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" value="{{ user_profile.name }}" class="shadow-none bg-gray-100">
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="col-span-2">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" name="dob" value="{{ user_profile.dob }}" class="shadow-none bg-gray-100">
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-span-2">
+                            <label for="phone">Phone</label>
+                            <input type="tel" name="phone" value="{{ user_profile.phone }}" class="shadow-none bg-gray-100">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-span-2">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" value="{{ user_profile.email }}" class="shadow-none bg-gray-100">
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-span-2">
+                            <label for="gender">Gender</label>
+                            <select name="gender" class="shadow-none bg-gray-100">
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="male" {% if user_profile.gender == "male" %}selected{% endif %}>Male</option>
+                                <option value="female" {% if user_profile.gender == "female" %}selected{% endif %}>Female</option>
+                                <option value="other" {% if user_profile.gender == "other" %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Major -->
+                        <div class="col-span-2">
+                            <label for="major">Major</label>
+                            <input type="text" name="major" value="{{ user_profile.major }}" class="shadow-none bg-gray-100">
+                        </div>
+                    </div> 
+                
+                    <!-- Save and Cancel Buttons -->
+                    <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                        <a href="/" class="p-2 px-4 rounded bg-gray-50 text-red-500">Cancel</a>
+                        <button type="submit" class="button bg-blue-700">Save</button>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-    
-                       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                </div>
+            </div>
+        </form>
+    </div>
 
-                            <div class="col-span-2">
-                                <label for=""> Profile Image</label>
-                                <img width="100" height="100" src="{{user_profile.profileimg.url}}"/>
-                                <input type="file" name ="image" value="" class="shadow-none bg-gray-100">
-                            </div>
-                            <div class="col-span-2">
-                                <label for="about">Bio</label>  
-                                <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
-                            </div> 
-                            <div class="col-span-2">
-                                <label for=""> Location</label>
-                                <input type="text" name ="location"placeholder="" value = "{{user_profile.location}}" class="shadow-none bg-gray-100">
-                            </div>
-                       </div> 
-    
-                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
-                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> <a href="/">Cancel </button>
-                           <button type="submit" class="button bg-blue-700"> Save </button>
-                       </div>
-                      </form>
-    
-                    </div>
+</body>
                 
 
                     <!-- <div>

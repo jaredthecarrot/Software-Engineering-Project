@@ -18,51 +18,42 @@
 </head>
 
 <body>
-<div class="theme-layout">
-    <!-- Header Section -->
-    <section class="profile-header">
-        <div class="feature-photo">
-            <figure>
-                <img src="{% static 'images/resources/timeline-1.jpg' %}" alt="Cover Photo">
-            </figure>
-            <div class="profile-stats">
-                <span><a href="/">Home</a></span>
-                <span><b>11</b> Posts</span>
-                <span><b>1.7m</b> Followers</span>
-                <span><b>3.5k</b> Following</span>
-                <a href="#" class="follow-btn">Follow</a>
+    <div class="theme-layout container">
+        <!-- Header Section -->
+        <section class="profile-header">
+            <div class="feature-photo">
+                <figure>
+                    <img src="{% static 'images/resources/timeline-1.jpg' %}" alt="Cover Photo">
+                </figure>
             </div>
-        </div>
-        <div class="profile-info">
-            <div class="user-avatar">
-                <img src="{{ user_profile.profileimg.url }}" alt="Profile Image" class="profile-img">
-                <form class="edit-photo">
-                    <label>
-                        <a href="#account-settings">Upload Profile Photo</a>
-                    </label>
-                </form>
+            <div class="profile-info">
+                <div class="user-avatar">
+                    <img src="{{ user_profile.profileimg.url }}" alt="Profile Image" class="profile-img">
+                </div>
+                <h1 class="username">@{{ username }}</h1>
+                <div class="profile-stats">
+                    <span><a href="/">Home</a></span>
+                    <span><b>11</b> Posts</span>
+                    <span><b>1.7m</b> Followers</span>
+                    <span><b>3.5k</b> Following</span>
+                    <a href="#" class="follow-btn">Follow</a>
+                </div>
             </div>
-            <h1 class="username">@{{ username }}</h1>
-        </div>
-    </section>
-
-    <!-- Profile Details Section -->
-    <section class="profile-details">
-        <div class="container">
-            <div class="row">
-                <!-- Profile Sidebar with Personal Information -->
-                <aside class="col-lg-3 sidebar">
-                    <div class="personal-info">
-                        <h3>Personal Information</h3>
-                        <ul>
-                            <li><strong>Name:</strong> {{ user_profile.name }}</li>
-                            <li><strong>DOB:</strong> {{ user_profile.dob }}</li>
-                            <li><strong>Gender:</strong> {{ user_profile.gender }}</li>
-                            <li><strong>Phone:</strong> {{ user_profile.phone }}</li>
-                            <li><strong>Email:</strong> {{ user_profile.email }}</li>
-                            <li><strong>Major:</strong> {{ user_profile.major }}</li>
-                        </ul>
-                    </div>
+        </section>
+    
+        <!-- Profile Details Section -->
+        <section class="profile-details">
+            <div class="personal-info">
+                <h3>Personal Information</h3>
+                <ul>
+                    <li><strong>Name:</strong> {{ user_profile.name }}</li>
+                    <li><strong>DOB:</strong> {{ user_profile.dob }}</li>
+                    <li><strong>Gender:</strong> {{ user_profile.gender }}</li>
+                    <li><strong>Phone:</strong> {{ user_profile.phone }}</li>
+                    <li><strong>Email:</strong> {{ user_profile.email }}</li>
+                    <li><strong>Major:</strong> {{ user_profile.major }}</li>
+                </ul>
+            </div>
                 </aside>
 
                 <!-- Profile Bio and Media Section -->
