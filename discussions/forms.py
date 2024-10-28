@@ -1,12 +1,13 @@
 from django import forms
-from .models import Thread, Comment
+from .models import Thread, Reply
 
 class ThreadForm(forms.ModelForm):
     class Meta:
         model = Thread
-        fields = ['title']
+        fields = ['title', 'content']
 
-class CommentForm(forms.ModelForm):
+class ReplyForm(forms.ModelForm):
     class Meta:
-        model = Comment
+        model = Reply
         fields = ['content']
+
