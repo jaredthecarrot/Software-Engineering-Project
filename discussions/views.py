@@ -1,39 +1,40 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Thread, Comment
-from .forms import ThreadForm, CommentForm
 from django.contrib.auth.decorators import login_required
-
-def thread_list(request):
-    threads = Thread.objects.all().order_by('-created_at')
-    return render(request, 'discussions/thread_list.html', {'threads': threads})
+from .models import Thread, Reply
+from .forms import ThreadForm, ReplyForm
 
 @login_required
-def create_thread(request):
-    if request.method == 'POST':
-        form = ThreadForm(request.POST)
-        if form.is_valid():
-            thread = form.save(commit=False)
-            thread.user = request.user
-            thread.save()
-            return redirect('thread_list')
-    else:
-        form = ThreadForm()
-    return render(request, 'discussions/create_thread.html', {'form': form})
+def discussions_view(request):
+    threads = Thread.objects.all().order_by('-created_at')  # Fetch all threads, ordered by creation date
+    thread_form = ThreadForm()  # Initialize form for creating threads
 
-@login_required
-def thread_detail(request, pk):
-    thread = get_object_or_404(Thread, pk=pk)
-    comments = thread.comments.all()
     if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.user = request.user
-            comment.thread = thread
-            comment.save()
-            return redirect('thread_detail', pk=thread.pk)
+        if 'reply_thread_id' in request.POST:
+            # Handle reply to a thread
+            thread_id = request.POST['reply_thread_id']
+            reply_form = ReplyForm(request.POST)
+            if reply_form.is_valid():
+                reply = reply_form.save(commit=False)
+                reply.thread = get_object_or_404(Thread, id=thread_id)  # Link the reply to the correct thread
+                reply.author = request.user  # Set the author of the reply to the current user
+                reply.save()  # Save the reply instance
+                return redirect('discussions_view')  # Redirect after successfully creating a reply
+        else:
+            # Handle creating a new thread
+            thread_form = ThreadForm(request.POST)
+            if thread_form.is_valid():
+                thread = thread_form.save(commit=False)
+                thread.author = request.user  # Set the author of the thread to the current user
+                thread.save()  # Save the thread instance
+                return redirect('discussions_view')  # Redirect after successfully creating a thread
+
     else:
-        comment_form = CommentForm()
-    
-    return render(request, 'discussions/thread_detail.html', {'thread': thread, 'comments': comments, 'comment_form': comment_form})
+        reply_form = ReplyForm()  # Initialize reply form for GET requests
+
+    # Render the template with threads, thread form, and reply form
+    return render(request, 'discussions/discussions.html', {
+        'threads': threads,
+        'thread_form': thread_form,
+        'reply_form': ReplyForm(),  # Initialize a new reply form for use in the template
+    })
 

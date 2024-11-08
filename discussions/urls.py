@@ -1,8 +1,11 @@
 from django.urls import path
-from . import views
+from .views import discussions_view
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
-    path('', views.thread_list, name='thread_list'),
-    path('create/', views.create_thread, name='create_thread'),
-    path('thread/<int:pk>/', views.thread_detail, name='thread_detail'),
+    path('', discussions_view, name='discussions_view'),  # Root of the discussions app
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
