@@ -3,8 +3,10 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile, User
 from posts.models import Post, LikePost
+from django.shortcuts import render, get_object_or_404
+
 
 # Create your views here.
 @login_required(login_url='signin')
@@ -26,8 +28,18 @@ def index(request):
 
 @login_required(login_url='signin')
 def profile(request):
-    user_profile = Profile.objects.get(user=request.user)
-    return render(request,'profile.html', {'user_profile': user_profile})
+    # Check if a specific username is provided in the URL
+    username = request.GET.get('username')
+    
+    if username:
+        # Retrieve the user profile by the provided username
+        user = get_object_or_404(User, username=username)
+        user_profile = get_object_or_404(Profile, user=user)
+    else:
+        # Fallback to the logged-in user's profile
+        user_profile = Profile.objects.get(user=request.user)
+    
+    return render(request, 'profile.html', {'user_profile': user_profile})
     
     
 

@@ -218,7 +218,7 @@
                                             <img src="{{post.user.profile.profileimg.url}}" class="bg-gray-200 border border-white rounded-full w-8 h-8">
                                         </div>
                                     </a>
-                                    <span class="block capitalize font-semibold "> <a href="#">@{{ post.user.username }}</a> </span>
+                                    <a href="{% url 'profile' %}?username={{ post.user.username }}">@{{ post.user.username }}</a>
                                     
                                 </div>
                               <div>
