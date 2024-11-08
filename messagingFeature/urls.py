@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from uuid import UUID
 
 urlpatterns = [
-    path('chat_view', views.chat_view, name='chat_view')
+    path('chat_view/', views.chat_view, name='chat_view')
 ]
 
 if settings.DEBUG:
