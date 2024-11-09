@@ -38,10 +38,13 @@ def profile(request):
     else:
         # Fallback to the logged-in user's profile
         user_profile = Profile.objects.get(user=request.user)
-    
-    return render(request, 'profile.html', {'user_profile': user_profile})
-    
-    
+        user = request.user  # Fallback to the current user
+
+    # Pass user ID to the template
+    return render(request, 'profile.html', {
+        'user_profile': user_profile,
+        'profile_user_id': user.id  # Add profile user ID to context
+    })
 
 
 @login_required(login_url='signin')

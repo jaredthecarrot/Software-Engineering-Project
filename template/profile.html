@@ -34,7 +34,9 @@
 					<span style="color: white; font-size: 27px;"><b>1.7m followers</b></span>
 					<span style="color: white; font-size: 27px;"><b>3.5k following</b></span>
 					<a href="" title="" data-ripple=""><button style="background-color: #ffc0cb; border: #ffc0cb;">Follow</button></a>
-					<a href="" title="" data-ripple=""><button style="background-color: #ffc0cb; border: #ffc0cb;">Message</button></a>
+					<a href="javascript:void(0);" title="Message {{ user_profile.user.username }}" onclick="openChatBox()">
+						<button style="background-color: #87CEEB; border: #87CEEB;">Message</button>
+					</a>
 					</div>
 				</form>
 
@@ -155,7 +157,68 @@
 		</div>	
 	</section>
 
+		<!-- Chat Box (initially hidden) -->
+		<div id="chatBox" class="chat-box-container" style="display: none;">
+			<div class="chat-header">
+				<span class="online-indicator">●</span>
+				<span class="chat-title">Chat with <strong>{{ user_profile.user.username }}</strong></span>
+				<button class="close-chat" onclick="closeChatBox()">✕</button>
+			</div>
+		
+			<div class="chat-messages">
+				{% for message in chat_messages reversed %}
+				{% if message.author == user %}
+					<div class="message message-sent">
+						<p>{{ message.body }}</p>
+					</div>
+				{% else %}
+					<div class="message message-received">
+						<p>{{ message.body }}</p>
+					</div>
+				{% endif %}
+				{% endfor %}
+			</div>
+		
+			<div class="chat-input">
+				<form id="chat_message_form" method="POST" onsubmit="sendMessage(event)">
+					{% csrf_token %}
+					<input type="text" name="message" placeholder="Type a message..." required>
+					<button type="submit">Send</button>
+				</form>
+			</div>
+		</div>
+
+	<script>
+		function openChatBox() {
+			document.getElementById("chatBox").style.display = "flex";
+		}
 	
+		function closeChatBox() {
+			document.getElementById("chatBox").style.display = "none";
+		}
+	
+		function sendMessage(event) {
+			event.preventDefault();
+			// Add AJAX call to send the message without reloading the page
+			let form = document.getElementById("chat_message_form");
+			let formData = new FormData(form);
+			
+			fetch(form.action, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest',
+				},
+			})
+			.then(response => response.json())
+			.then(data => {
+				// Handle response, add the new message to chat messages area
+			})
+			.catch(error => console.error('Error:', error));
+			
+			form.reset(); // Reset the form input
+		}
+	</script>
 	
 	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="js/main.min.js"></script>
 	<script src="{% static 'js/script.js' %}"></script>

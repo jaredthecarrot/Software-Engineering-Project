@@ -13,6 +13,18 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f3f4f6;
 }
+ 
+.profile-picture {
+    width: 35px !important;
+    height: 35px !important;
+    max-width: 35px !important;
+    max-height: 35px !important;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
 
 /* Chat container styling */
 .chat-container {
@@ -28,7 +40,6 @@ body {
     overflow: hidden;
 }
 
-/* Header styling */
 .chat-header {
     display: flex;
     align-items: center;
@@ -38,6 +49,8 @@ body {
     font-weight: 500;
     color: #4a5568;
     border-bottom: 1px solid #e5e7eb;
+    gap: 8px;
+    overflow: hidden;
 }
 
 .online-indicator {
@@ -129,4 +142,13 @@ body {
     background-color: #ccc;
 }
 
- 
+.profile-picture {
+    width: 35px !important;
+    height: 35px !important;
+    max-width: 35px !important;
+    max-height: 35px !important;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
