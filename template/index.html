@@ -404,6 +404,156 @@
 
                     </div>
 
+                    <!-- ChatBot-->
+                     <div>
+                        <div class="chatbot-container" id="chatbot-container" style="
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        width: 300px;
+                        max-height: 400px;
+                        background-color: #fff;
+                        border-radius: 10px;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                        overflow: hidden;
+                        display: none;
+                        flex-direction: column;
+                        font-family: Arial, sans-serif;
+                    ">
+                        <div class="chat-header" style="
+                            background-color: #580909;
+                            color: white;
+                            padding: 10px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                        ">
+                            <div class="header-content" style="display: flex; align-items: center;">
+                                <img src="media/post_images/Dusty.jpg" alt="Bot Icon" style="border-radius: 50%; width: 30px; height: 30px; margin-right: 10px;">
+                                <span>Chat with Dusty</span>
+                            </div>
+                            <button class="close-btn" onclick="toggleChat()" style="
+                                background: none;
+                                border: none;
+                                color: white;
+                                font-size: 20px;
+                                cursor: pointer;
+                            ">×</button>
+                        </div>
+                        <div class="chat-body" id="chat-body" style="
+                            padding: 10px;
+                            flex: 1;
+                            overflow-y: auto;
+                            background-color: #f9f9f9;
+                        ">
+                            <div class="message bot-message" style="
+                                margin: 10px 0;
+                                padding: 10px;
+                                border-radius: 10px;
+                                max-width: 80%;
+                                font-size: 14px;
+                                background-color: #e1f0ff;
+                            ">Hello! How can I assist you today?</div>
+                        </div>
+                        <div class="chat-input" style="
+                            display: flex;
+                            padding: 10px;
+                            border-top: 1px solid #ddd;
+                        ">
+                            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)" style="
+                                flex: 1;
+                                padding: 8px;
+                                border: 1px solid #ddd;
+                                border-radius: 20px;
+                                outline: none;
+                            ">
+                            <button onclick="sendMessage()" style="
+                                background-color: #580909;
+                                color: white;
+                                border: none;
+                                padding: 8px 16px;
+                                border-radius: 20px;
+                                margin-left: 8px;
+                                cursor: pointer;
+                            ">Send</button>
+                        </div>
+                    </div>
+
+                    <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()" style="
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background-color: #580909;
+                        color: white;
+                        border: none;
+                        border-radius: 50px;
+                        padding: 10px 20px;
+                        font-size: 16px;
+                        cursor: pointer;
+                        z-index: 1;
+                    ">Chat with us</button>
+
+                    <script>
+                        function toggleChat() {
+                            const chatbotContainer = document.getElementById('chatbot-container');
+                            const chatToggleBtn = document.getElementById('chat-toggle');
+                            
+                            if (chatbotContainer.style.display === "none" || chatbotContainer.style.display === "") {
+                                chatbotContainer.style.display = "flex";
+                                chatToggleBtn.style.display = "none";
+                            } else {
+                                chatbotContainer.style.display = "none";
+                                chatToggleBtn.style.display = "block";
+                            }
+                        }
+
+                        function sendMessage() {
+                            const userInput = document.getElementById('user-input');
+                            const message = userInput.value;
+
+                            if (!message) return;
+
+                            addMessage('user', message);
+                            userInput.value = '';
+
+                            setTimeout(() => {
+                                addMessage('bot', `You said: ${message}`);
+                            }, 500);
+                        }
+
+                        function addMessage(sender, message) {
+                            const chatBody = document.getElementById('chat-body');
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('message');
+                            messageElement.style.margin = "10px 0";
+                            messageElement.style.padding = "10px";
+                            messageElement.style.borderRadius = "10px";
+                            messageElement.style.maxWidth = "80%";
+                            messageElement.style.fontSize = "14px";
+
+                            if (sender === 'bot') {
+                                messageElement.style.backgroundColor = "#e1f0ff";
+                                messageElement.innerHTML = `<strong>ChatBot:</strong> ${message}`;
+                            } else {
+                                messageElement.style.backgroundColor = "#f47b56";
+                                messageElement.style.color = "white";
+                                messageElement.style.alignSelf = "flex-end";
+                                messageElement.textContent = message;
+                            }
+
+                            chatBody.appendChild(messageElement);
+                            chatBody.scrollTop = chatBody.scrollHeight;
+                        }
+
+                        function handleKeyPress(event) {
+                            if (event.key === 'Enter') {
+                                sendMessage();
+                            }
+                        }
+                    </script>
+
+                     </div>
+
                     <!-- right sidebar-->
                     <div class="lg:w-5/12">
 
