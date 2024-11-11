@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Board</title>
+</head>
+<body>
+    <h1>Discussion Board</h1>
+
+    <!-- Thread Creation Form -->
+    <h2>Create a New Thread</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ thread_form.as_p }}  <!-- Render thread creation form fields -->
+        <button type="submit">Create Thread</button>
+    </form>
+
+    <hr>
+
+    <!-- List of Discussion Threads -->
+    <h2>Threads</h2>
+    {% if threads %}
+        <ul>
+            {% for thread in threads %}
+                <li>
+                    <p><strong>{{ thread.title }}</strong></p>
+                    <p>{{ thread.content }}</p>
+                    <p>Posted by: {{ thread.author.username }} on {{ thread.created_at }}</p>
+
+                    <p><strong>Replies:</strong></p>
+                    <ul>
+                        {% for reply in thread.reply_set.all %}
+                            <li>{{ reply.author.username }}: {{ reply.content }}</li>
+                        {% empty %}
+                            <li>No replies yet.</li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Reply Form -->
+                    <form method="post" action="{% url 'discussions_view' %}">  <!-- Ensure the action URL points to the discussions view -->
+                        {% csrf_token %}
+                        <input type="hidden" name="reply_thread_id" value="{{ thread.id }}">
+                        {{ reply_form.as_p }}  <!-- Render reply form fields -->
+                        <button type="submit">Reply</button>
+                    </form>
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No threads available.</p>  <!-- Message if no threads exist -->
+    {% endif %}
+</body>
+</html>
+
