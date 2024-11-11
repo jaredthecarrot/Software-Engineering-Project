@@ -4,10 +4,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Profile page for {{ username }}" />
-    <meta name="keywords" content="profile, user, social media" />
+    <meta name="description" content="Profile page for {{ username }}">
+    <meta name="keywords" content="profile, user, social media">
     <title>Profile - {{ username }}</title>
 
     <!-- Stylesheets -->
@@ -15,35 +15,72 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/color.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+    <style>
+        /* Full-width cover photo */
+        .feature-photo {
+            width: 100%;
+            position: relative;
+        }
+        .feature-photo img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Center profile picture */
+        .user-avatar {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px; /* Adjust size as needed */
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #fff; /* Optional border around profile image */
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Center the profile stats and other info below the avatar */
+        .profile-info {
+            text-align: center;
+            margin-top: 100px; /* Space from cover photo */
+        }
+    </style>
 </head>
 
 <body>
-    <div class="theme-layout container">
+    <div class="container theme-layout">
         <!-- Header Section -->
-        <section class="profile-header">
+        <header class="profile-header">
             <div class="feature-photo">
                 <figure>
-                    <img src="{% static 'images/resources/timeline-1.jpg' %}" alt="Cover Photo">
+                    <img src="{% static 'images/resources/timeline-1.jpg' %}" alt="Cover Photo" class="cover-photo">
                 </figure>
-            </div>
-            <div class="profile-info">
                 <div class="user-avatar">
                     <img src="{{ user_profile.profileimg.url }}" alt="Profile Image" class="profile-img">
                 </div>
+            </div>
+            <div class="profile-info">
                 <h1 class="username">@{{ username }}</h1>
                 <div class="profile-stats">
                     <span><a href="/">Home</a></span>
                     <span><b>11</b> Posts</span>
                     <span><b>1.7m</b> Followers</span>
                     <span><b>3.5k</b> Following</span>
-                    <a href="#" class="follow-btn">Follow</a>
+                    <button class="follow-btn">Follow</button>
                 </div>
             </div>
-        </section>
-    
-        <!-- Profile Details Section -->
-        <section class="profile-details">
-            <div class="personal-info">
+        </header>
+
+        <!-- Profile Content Section -->
+        <main class="profile-content">
+            <!-- Personal Information -->
+            <section class="personal-info">
                 <h3>Personal Information</h3>
                 <ul>
                     <li><strong>Name:</strong> {{ user_profile.name }}</li>
@@ -53,46 +90,43 @@
                     <li><strong>Email:</strong> {{ user_profile.email }}</li>
                     <li><strong>Major:</strong> {{ user_profile.major }}</li>
                 </ul>
-            </div>
-                </aside>
+            </section>
 
-                <!-- Profile Bio and Media Section -->
-                <div class="col-lg-6">
-                    <div class="bio-section">
-                        <h3>About Me</h3>
-                        <p>{{ user_profile.bio }}</p>
-                    </div>
-
-                    <!-- Photo Gallery -->
-                    <div class="photo-gallery">
-                        <h3>Photos</h3>
-                        <ul class="photos">
-                            <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 1"></li>
-                            <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 2"></li>
-                            <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 3"></li>
-                        </ul>
-                    </div>
+            <!-- About & Gallery Section -->
+            <section class="bio-gallery">
+                <div class="bio">
+                    <h3>About Me</h3>
+                    <p>{{ user_profile.bio }}</p>
                 </div>
 
-                <!-- Additional Sidebar Options -->
-                <aside class="col-lg-3 sidebar">
-                    <div class="settings">
-                        <h3>Account Settings</h3>
-                        <ul>
-                            <li><a href="#">Edit Profile</a></li>
-                            <li><a href="#">Privacy Settings</a></li>
-                            <li><a href="#">Notification Settings</a></li>
-                        </ul>
-                    </div>
-                </aside>
-            </div>
-        </div>
-    </section>
-</div>
+                <!-- Photo Gallery -->
+                <div class="photo-gallery">
+                    <h3>Photos</h3>
+                    <ul class="photos">
+                        <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 1"></li>
+                        <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 2"></li>
+                        <li><img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" alt="Photo 3"></li>
+                    </ul>
+                </div>
+            </section>
 
-<!-- Scripts -->
-<script src="{% static 'js/main.min.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
+            <!-- Sidebar for Settings -->
+            <aside class="sidebar">
+                <div class="settings">
+                    <h3>Account Settings</h3>
+                    <ul>
+                        <li><a href="#">Edit Profile</a></li>
+                        <li><a href="#">Privacy Settings</a></li>
+                        <li><a href="#">Notification Settings</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+    </div>
 
+    <!-- Scripts -->
+    <script src="{% static 'js/main.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
+
 </html>
