@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, User
 from posts.models import Post, LikePost
 from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
 
 
 # Create your views here.
@@ -41,9 +42,6 @@ def profile(request):
     
     return render(request, 'profile.html', {'user_profile': user_profile})
     
-    
-
-
 @login_required(login_url='signin')
 def settings(request):
     user_profile = Profile.objects.get(user=request.user)
@@ -72,6 +70,65 @@ def settings(request):
         return redirect('settings')
     
     return render(request,'setting.html', {'user_profile': user_profile})
+
+@login_required(login_url='signin')
+def profile_update(request):
+    if request.method == 'POST':
+        try:
+            # Code for updating profile, e.g., updating user details
+            profile_image = request.FILES.get('image')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            gender = request.POST.get('gender')
+            dob = request.POST.get('dob')
+            age = request.POST.get('age')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            bio = request.POST.get('bio')
+            location = request.POST.get('location')
+            theme = request.POST.get('theme')
+
+            # Validate unique email if it's being changed
+            if User.objects.filter(email=email).exclude(username=request.user.username).exists():
+                messages.error(request, 'This email is already associated with another account.')
+                return redirect('profile_update')
+
+            # Update the user's email and save
+            user = request.user
+            user.email = email
+            user.save()
+
+            # Update or create Profile with new data
+            profile, created = Profile.objects.get_or_create(user=user)
+            if profile_image:
+                profile.profileimg = profile_image
+            profile.first_name = first_name
+            profile.last_name = last_name
+            profile.gender = gender
+            profile.dob = dob
+            profile.age = age
+            profile.phone = phone
+            profile.bio = bio
+            profile.location = location
+            profile.theme = theme
+            profile.save()
+
+            # Success message
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('profile_update')
+        
+        except Exception as e:
+            # Error message
+            messages.error(request, 'An error occurred. Please try again.')
+            print(e)  # Optional: Print the error to console for debugging
+            return redirect('profile_update')
+    
+    return render(request, 'profile_update.html')
+
+def test_messages(request):
+    messages.success(request, "This is a test success message.")
+    messages.error(request, "This is a test error message.")
+    return render(request, 'test_messages.html')
 
 def signup(request):
     
