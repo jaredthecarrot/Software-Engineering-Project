@@ -68,6 +68,51 @@ def settings(request):
             user_profile.location = location
             user_profile.save()
         return redirect('settings')
+
+    try:
+             # Get profile information from form data
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            gender = request.POST.get('gender')
+            dob = request.POST.get('dob')
+            age = request.POST.get('age')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            bio = request.POST.get('bio')
+            location = request.POST.get('location')
+            theme = request.POST.get('theme')
+
+            # Validate unique email if it's being changed
+            if User.objects.filter(email=email).exclude(username=user_profile.username).exists():
+                messages.error(request, 'This email is already associated with another account.')
+                return redirect('settings')
+
+             # Update the user's email and save
+            user_profile.email = email
+            user_profile.save()
+
+            # Update Profile with new data
+            user_profile.profileimg = user_profile.image
+            user_profile.first_name = first_name
+            user_profile.last_name = last_name
+            user_profile.gender = gender
+            user_profile.dob = dob
+            user_profile.age = age
+            user_profile.phone = phone
+            user_profile.bio = bio
+            user_profile.location = location
+            user_profile.theme = theme
+            user_profile.save()
+
+            # Success message
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('settings')
+        
+    except Exception as e:
+            # Error message
+            messages.error(request, 'An error occurred. Please try again.')
+            print(e)  # Optional: Print the error to console for debugging
+            return redirect('settings')
     
     return render(request,'setting.html', {'user_profile': user_profile})
 
@@ -124,12 +169,7 @@ def profile_update(request):
             return redirect('profile_update')
     
     return render(request, 'profile_update.html')
-
-def test_messages(request):
-    messages.success(request, "This is a test success message.")
-    messages.error(request, "This is a test error message.")
-    return render(request, 'test_messages.html')
-
+    
 def signup(request):
     
     if request.method == 'POST':

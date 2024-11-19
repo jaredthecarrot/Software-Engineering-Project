@@ -21,7 +21,7 @@
     <body>
         <div class="container mx-auto p-6">
             <h1 class="text-3xl font-bold text-gray-800 tracking-tight mt-6 mb-4">
-                <a href="/" class="text-blue-600 hover:underline">Home</a> / Account Settings for <b>admin123</b>
+                <a href="/" class="text-blue-600 hover:underline">Home</a> / Account Settings for <b>{{user_profile.user.url}}</b>
             </h1>
     
             <nav class="mt-5 flex space-x-4 text-sm text-gray-600">
@@ -35,7 +35,20 @@
             <hr class="my-4 border-gray-300">
     
             <form action="" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="csrfmiddlewaretoken" value="dsF6k5aPYUWIpLzM4tUML2YpkMQUcnMPGiE80pKZ9sSaQurXVuC6HJXM03QlcXqT">
+
+                {% csrf_token %}
+                
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!--input type="hidden" name="csrfmiddlewaretoken" value="dsF6k5aPYUWIpLzM4tUML2YpkMQUcnMPGiE80pKZ9sSaQurXVuC6HJXM03QlcXqT"-->
     
                 <div class="grid lg:grid-cols-3 gap-8">
                     <div>
