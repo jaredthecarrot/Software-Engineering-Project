@@ -1,19 +1,4 @@
-/* General reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #f3f4f6;
-}
- 
 .profile-picture {
     width: 35px !important;
     height: 35px !important;

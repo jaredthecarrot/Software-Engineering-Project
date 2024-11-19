@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, User
 from posts.models import Post, LikePost
 from django.shortcuts import render, get_object_or_404
+from messagingFeature.models import ChatChannel, ChatMessage
+from messagingFeature.forms import ChatmessageCreateForm
 
 
 # Create your views here.
@@ -26,24 +28,35 @@ def index(request):
         post.liked_users = LikePost.objects.filter(post_id=post.id).select_related('user')[:3]
     return render(request,'index.html', {'user_profile': user_profile, 'posts':posts})
 
+
 @login_required(login_url='signin')
 def profile(request):
-    # Check if a specific username is provided in the URL
+    # Get the username from the query parameters
     username = request.GET.get('username')
+    if not username:
+        return HttpResponse("Username not provided", status=400)  # Handle missing username error
     
-    if username:
-        # Retrieve the user profile by the provided username
-        user = get_object_or_404(User, username=username)
-        user_profile = get_object_or_404(Profile, user=user)
-    else:
-        # Fallback to the logged-in user's profile
-        user_profile = Profile.objects.get(user=request.user)
-        user = request.user  # Fallback to the current user
+    # Find the target user based on the username
+    target_user = get_object_or_404(User, username=username)
+    chat_channel = ChatChannel.get_or_create_channel(request.user, target_user)
+    chat_messages = chat_channel.chat_messages.all()[:30]
+    form = ChatmessageCreateForm()
+    
+    if request.method == 'POST':
+        form = ChatmessageCreateForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.author = request.user
+            message.chat_channel = chat_channel 
+            message.save()
 
-    # Pass user ID to the template
+    # Pass user data to the template
     return render(request, 'profile.html', {
-        'user_profile': user_profile,
-        'profile_user_id': user.id  # Add profile user ID to context
+        'chat_messages': chat_messages,
+        'form': form,
+        'target_user': target_user,
+        'user_profile': target_user.profile,  # Assuming Profile model is related to User
+        'profile_user_id': target_user.id
     })
 
 
