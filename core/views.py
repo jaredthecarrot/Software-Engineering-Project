@@ -8,6 +8,17 @@ from posts.models import Post, LikePost
 from django.shortcuts import render, get_object_or_404
 from messagingFeature.models import ChatChannel, ChatMessage
 from messagingFeature.forms import ChatmessageCreateForm
+from django.contrib.auth import authenticate as auth_authenticate, login as auth_login
+from django.contrib import messages
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile, User
+from posts.models import Post, LikePost
+from django.shortcuts import render, get_object_or_404
+from .forms import RegistrationForm
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.models import User #To be check
+from django.contrib.auth import authenticate, login
 
 
 # Create your views here.

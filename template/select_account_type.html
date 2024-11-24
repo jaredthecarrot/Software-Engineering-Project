@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Account Type</title>
+</head>
+<body>
+    <h2>Select Account Type</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            <input type="radio" name="account_type" value="regular" checked>
+            Regular User
+        </label><br>
+        <label>
+            <input type="radio" name="account_type" value="organization">
+            Organization Account
+        </label><br><br>
+        <button type="submit">Continue</button>
+    </form>
+</body>
+</html>
