@@ -1,0 +1,110 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #a31a1a; /* Light gray background */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Colors */
+h1, h2 {
+    color: #800000; /* Maroon color for headings */
+}
+
+p {
+    line-height: 1.6;
+    color: #47e708; /* Dark gray for paragraphs */
+}
+
+/* Header */
+.header {
+    background-color: #800000; /* Maroon background */
+    color: #550bdf; /* Light gray text */
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* About Section */
+.about-section {
+    background-color: #15cffd; /* White background for the section */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.about-content h2 {
+    color: #800000; /* Maroon for section titles */
+    margin-top: 20px;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #800000; /* Maroon background */
+    color: #109fd8; /* Light gray text */
+    margin-top: 40px;
+    border-radius: 8px;
+}
+
+/* Back Button */
+.back-button {
+    display: inline-block;
+    background-color: #ec0a0a; /* Dark gray background */
+    color: #fff; /* White text */
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #800000; /* Maroon color on hover */
+}
+
+/* Link Styles */
+a {
+    color: #800000; /* Maroon color for links */
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: none; /* Remove underline on hover */
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .about-section {
+        padding: 15px;
+    }
+
+    .header, .footer {
+        padding: 15px 0;
+    }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
+    p {
+        font-size: 0.9em;
+    }
+}
+
