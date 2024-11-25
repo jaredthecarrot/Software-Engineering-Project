@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'posts',
     'core',
     'discussions',
-    'messagingFeature'
+    'messagingFeature',
+    'search_engine'
     
     
 ]
