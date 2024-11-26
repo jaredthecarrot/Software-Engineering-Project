@@ -24,7 +24,8 @@ urlpatterns = [
     path('', include('core.urls')),
     path('', include('posts.urls')),
     path('discussions/', include('discussions.urls')),
-    path('', include('messagingFeature.urls'))
+    path('', include('messagingFeature.urls')),
+    path('', include('search_engine.urls'))
 ]
 
 urlpatterns = urlpatterns+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
