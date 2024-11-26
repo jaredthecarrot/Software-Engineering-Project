@@ -32,7 +32,7 @@ def discussions_view(request):
         reply_form = ReplyForm()  # Initialize reply form for GET requests
 
     # Render the template with threads, thread form, and reply form
-    return render(request, 'discussions/discussions.html', {
+    return render(request, 'discussions.html', {
         'threads': threads,
         'thread_form': thread_form,
         'reply_form': ReplyForm(),  # Initialize a new reply form for use in the template
