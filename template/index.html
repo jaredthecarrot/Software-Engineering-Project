@@ -43,6 +43,22 @@
                                     </svg>
                                 </button>
                             </form>
+                            {% if query %}
+                            <h2>Search Results for "{{ query }}"</h2>
+                            <ul>
+                                {% for user in results %}
+                                <li>
+                                    <strong>Username:</strong> {{ user.username }}<br>
+                                    <strong>Email:</strong> {{ user.email }}<br>
+                                    <strong>First Name:</strong> {{ user.first_name }}
+                                </li>
+                                {% empty %}
+                                    <li>No results found for "{{ query }}"</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                                <h2>Enter a username to search</h2>
+                            {% endif %}
                         </div>                        
 
                     </div>
