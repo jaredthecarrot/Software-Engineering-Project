@@ -16,6 +16,35 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
 </head>
+<style>
+    .header_dropdown {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        min-width: 200px;
+    }
+    
+    .header_dropdown ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .header_dropdown li {
+        padding: 5px 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .header_dropdown li:last-child {
+        border-bottom: none;
+    }
+    
+    .header_dropdown li a {
+        text-decoration: none;
+        color: #333;
+    }
+</style>
 
 <body>
 
@@ -189,12 +218,18 @@
                         </a>
                         <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                             <ul>
-                                <li><a href="settings">Friend 1 </a> </li>
-                                <li><a href="profile">Friend 2 </a> </li>
-                                <li><a href="logout">Friend 3</a></li>
+                                {% if friends %}
+                                    {% for friend in friends %}
+                                        <li>
+                                            <a href="{% url 'profile_detail' friend.id %}">{{ friend.user.username }}</a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>No recent chats available</li>
+                                {% endif %}
                             </ul>
                         </div>
-                        
+
                         <!-- profile -->
                         <a href="#">
                             <img src="{{user_profile.profileimg.url}}" class="header-avatar" alt="">

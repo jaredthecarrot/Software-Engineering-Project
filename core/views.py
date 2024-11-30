@@ -26,7 +26,11 @@ def index(request):
         
         # Add a list of users who liked this post (limit to last 3)
         post.liked_users = LikePost.objects.filter(post_id=post.id).select_related('user')[:3]
-    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts})
+    
+    # Get the list of friends
+    friends = user_profile.friends.all()
+    
+    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends})
 
 
 @login_required(login_url='signin')
