@@ -154,4 +154,26 @@ def logout(request):
 
 def about(request):
     return render(request,'about.html')
+
+@login_required(login_url='signin')
+def send_friend_request(request, target_user_id):
+    try:
+        target_user = User.objects.get(id=target_user_id)
+        target_username = target_user.username
+        # Logic to handle the friend request goes here
+        # Get the profiles of the current user and the target user
+        current_user_profile = get_object_or_404(Profile, user=request.user)
+        target_user_profile = get_object_or_404(Profile, user__id=target_user_id)
+        
+        # Add the target user to the current user's friends list
+        current_user_profile.friends.add(target_user_profile)
+        
+        # Optionally, add the current user to the target user's friends list for mutual friendship
+        target_user_profile.friends.add(current_user_profile)
+        
+        
+        return redirect(f"/profile?username={target_username}")
+    except User.DoesNotExist:
+        # Handle the case where the target user does not exist
+        return redirect('/')
     

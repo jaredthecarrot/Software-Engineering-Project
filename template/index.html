@@ -18,31 +18,45 @@
 </head>
 <style>
     .header_dropdown {
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 10px;
+        border-radius: 8px;
         min-width: 200px;
+        z-index: 1000;
+        display: none;
     }
-    
-    .header_dropdown ul {
+
+    .header_dropdown.show {
+        display: block;
+    }
+
+    .profile_dropdown ul {
         list-style: none;
-        margin: 0;
         padding: 0;
+        margin: 0;
     }
-    
-    .header_dropdown li {
-        padding: 5px 10px;
-        border-bottom: 1px solid #f0f0f0;
+
+    .profile_dropdown ul li {
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
     }
-    
-    .header_dropdown li:last-child {
+
+    .profile_dropdown ul li:last-child {
         border-bottom: none;
     }
-    
-    .header_dropdown li a {
+
+    .profile_dropdown ul li a {
         text-decoration: none;
         color: #333;
+        display: block;
+        transition: color 0.3s;
+    }
+
+    .profile_dropdown ul li a:hover {
+        color: #007bff;
     }
 </style>
 
@@ -211,8 +225,7 @@
                             <a href="#" class="see-all">See all</a>
                         </div> -->
 
-                        <!-- message button -->
-                        
+                        <!-- Message Button -->
                         <a href="#">
                             <img src="{{ MEDIA_URL }}frontend_images/messages_icon.png" class="header-avatar" alt="Messages">
                         </a>
@@ -221,11 +234,11 @@
                                 {% if friends %}
                                     {% for friend in friends %}
                                         <li>
-                                            <a href="{% url 'profile_detail' friend.id %}">{{ friend.user.username }}</a>
+                                            <a href="#"> {{ friend.user.username }} </a>
                                         </li>
                                     {% endfor %}
                                 {% else %}
-                                    <li>No recent chats available</li>
+                                    <li>No friends found</li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -552,7 +565,24 @@
     <!-- Include your new JavaScript file -->
     <script src="{% static 'post_js/real_time.js' %}"></script>
 
-
+    <script>
+        // Toggle visibility of message dropdown
+        document.querySelector('.header-avatar[src*="messages_icon"]').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            const dropdown = e.target.closest('a').nextElementSibling; // Target the nearest dropdown
+            dropdown.classList.toggle('show');
+        });
+    
+        // Close all dropdowns when clicking outside
+        window.addEventListener('click', function (e) {
+            const dropdowns = document.querySelectorAll('.header_dropdown');
+            dropdowns.forEach((dropdown) => {
+                if (!e.target.closest('.header-avatar') && !e.target.closest('.header_dropdown')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+    </script>
 
 <!-- Include Ionicons -->
 <script src="{% static 'path/to/ionicons.js' %}"></script>

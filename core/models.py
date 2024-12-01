@@ -12,8 +12,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=100, blank=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=True)
     
-    # Track friend requests sent and received
-    sent_requests = models.ManyToManyField('self', related_name='received_requests', blank=True, symmetrical=False)
+    
 
     def __str__(self):
         return self.user.username
