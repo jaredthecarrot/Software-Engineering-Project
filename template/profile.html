@@ -111,9 +111,6 @@
     <div class="chat-messages" id="chatMessages">
         {% for message in chat_messages reversed %}
             <div class="message {% if message.author == user %}message-sent{% else %}message-received{% endif %}">
-                {% if message.author != user %}
-                    <img src="{{ target_user.profile.profileimg.url }}" alt="Profile Picture" class="message-profile-picture">
-                {% endif %}
                 <div class="message-content">
                     <p>{{ message.body }}</p>
                 </div>
@@ -122,62 +119,72 @@
         {% endfor %}
     </div>
 
-    <!-- Message input area -->
     <div class="chat-input">
-        <form id="chat_message_form" method="POST">
+        <form id="chat_message_form" method="POST" action="{% url 'chat_view' target_user.id %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <input type="text" name="body" placeholder="Type your message..." class="chat-textarea" required>
+            <button type="submit" class="send-button">➤</button>
         </form>
     </div>
 </div>
 
-<!-- JavaScript to Open and Close Chat Box -->
 <script>
     function openChatBox() {
-        document.getElementById("chatBox").style.display = "flex";
+        const chatBox = document.getElementById("chatBox");
+        const chatMessages = document.getElementById("chatMessages");
+
+        // Display the chat box
+        chatBox.style.display = "flex";
+
+        // Scroll to the bottom of the messages container
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     function closeChatBox() {
         document.getElementById("chatBox").style.display = "none";
     }
-</script>
-	<!-- JavaScript to Handle AJAX Submission -->
-<script>
-    function sendMessage(event) {
-        event.preventDefault(); // Prevent form from submitting traditionally
 
-        const messageInput = document.getElementById("messageInput");
+    document.getElementById("chat_message_form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const messageInput = this.querySelector("input[name='body']");
         const chatMessages = document.getElementById("chatMessages");
-        const form = document.getElementById("chat_message_form");
-        const formData = new FormData(form);
+        const formData = new FormData(this);
 
-        fetch(form.action, {
-            method: 'POST',
+        fetch(this.action, {
+            method: "POST",
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
+                "X-Requested-With": "XMLHttpRequest",
             },
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Append the new message to chat messages
-                const messageContainer = document.createElement("div");
-                messageContainer.classList.add("message", "message-sent");
-                const messageContent = document.createElement("p");
-                messageContent.textContent = messageInput.value;
-                messageContainer.appendChild(messageContent);
-                chatMessages.appendChild(messageContainer);
-                
-                // Clear the input field
-                messageInput.value = "";
-                
-                // Scroll to the bottom of the chat
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Append the new message to the chat box
+                    const messageDiv = document.createElement("div");
+                    messageDiv.classList.add("message", "message-sent");
+
+                    const messageContent = document.createElement("div");
+                    messageContent.classList.add("message-content");
+                    messageContent.innerHTML = `<p>${messageInput.value}</p>`;
+                    messageDiv.appendChild(messageContent);
+
+                    chatMessages.appendChild(messageDiv);
+
+                    // Clear input field and scroll to the bottom
+                    messageInput.value = "";
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            })
+            .catch((error) => console.error("Error sending message:", error));
+    });
+
+    // Automatically scroll to the bottom when the page loads
+    window.onload = function () {
+        const chatMessages = document.getElementById("chatMessages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
 </script>
 
     <script src="{% static 'js/script.js' %}"></script>
