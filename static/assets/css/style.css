@@ -1638,6 +1638,8 @@ header .header_inner .right-side .header-avatar {
   height: 32px;
   border-radius: 100%;
   margin-left: 15px;
+  border: 2px solid #ccc; /* Outline */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
 
 .is_fixed {

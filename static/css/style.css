@@ -48,6 +48,9 @@ a:active {
     text-decoration: none;
 }
 
+
+
+
 input:focus,
 textarea:focus,
 select:focus,
@@ -10037,3 +10040,190 @@ aside.sidebar.full-style {
     text-transform: uppercase;
 }
 
+/* Chat Box Container */
+.chat-box-container {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 100%;
+    max-width: 400px;
+    height: 500px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1000;
+    flex-direction: column;
+    display: none;
+}
+
+/* Chat Header */
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: #f7f8fa;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
+.chat-profile-picture {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Chat Messages */
+.chat-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-sent, .message-received {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    position: relative;
+    word-wrap: break-word;
+    max-width: 80%;
+    width: fit-content;
+}
+
+/* Align message-sent to the right edge */
+.message-sent {
+    align-self: flex-end;
+    background-color: #722222;
+    color: #ffffff;
+    border-top-right-radius: 0;
+    text-align: left;
+}
+
+/* Align message-received to the left edge */
+.message-received {
+    align-self: flex-start;
+    background-color: #e2e8f0;
+    color: #2d3748;
+    border-top-left-radius: 0;
+    text-align: left;
+}
+
+.message-profile-picture {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* Message Content */
+.message-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-content p {
+    margin: 0;
+    display: inline;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Timestamp outside the bubble */
+.message-time {
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 5px;
+    text-align: right;
+}
+
+/* Adjust timestamp alignment for sent and received messages */
+.message-sent + .message-time {
+    align-self: flex-end;
+}
+
+.message-received + .message-time {
+    align-self: flex-start;
+}
+
+/* Chat Input Area */
+.chat-input {
+    display: flex;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid #ddd;
+    background-color: #f7f8fa;
+    align-items: center;
+}
+
+/* Extra buttons inside input (e.g., for adding attachments or emojis) */
+.extra-button {
+    background-color: #ffffff;
+    color: #888;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Style for the form inside the chat input area */
+.chat-input form {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+/* Style for the input field */
+.chat-input input[type="text"] {
+    flex-grow: 1;
+    padding: 8px 15px; /* Smaller padding for compact look */
+    font-size: 0.9rem; /* Slightly smaller font size */
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    margin-right: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Send button */
+.send-button {
+    background-color: #722222;
+    color: #ffffff;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
