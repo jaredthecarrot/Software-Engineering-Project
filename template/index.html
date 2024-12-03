@@ -16,6 +16,60 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
 </head>
+<style>
+    .header_dropdown {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        min-width: 200px;
+        z-index: 1000;
+        display: none;
+    }
+
+    .header_dropdown.show {  
+        display: block;
+    }
+
+    .profile_dropdown ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .profile_dropdown ul li {
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile_dropdown ul li:last-child {
+        border-bottom: none;
+    }
+
+    .profile_dropdown ul li a {
+        text-decoration: none;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: color 0.3s;
+    }
+
+    .profile_dropdown ul li a:hover {
+        color: #007bff;
+    }
+
+    .friend-profile-picture {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%; /* Makes the image round */
+        object-fit: cover; /* Ensures the image is properly cropped */
+    }
+</style>
 
 <body>
 
@@ -188,12 +242,32 @@
                             <a href="#" class="see-all">See all</a>
                         </div> -->
 
-                        <!-- message button -->
-                        
-                        <a href="">
+                        <!-- Message Button -->
+                        <a href="#">
                             <img src="{{ MEDIA_URL }}frontend_images/messages_icon.png" class="header-avatar" alt="Messages">
                         </a>
-                        
+
+                        <!-- Dropdown with List of Friends -->
+                        <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+                            <ul>
+                                {% if friends %}
+                                    {% for friend in friends %}
+                                        <li>
+                                            <a href="#" onclick="openChatWith('{{ friend.user.id }}', '{{ friend.user.username }}', '{{ friend.profileimg.url }}')">
+                                                <img src="{{ friend.profileimg.url }}" alt="Profile Picture" class="friend-profile-picture">
+                                                {{ friend.user.username }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>No friends found</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                        <!-- Include Chat Box -->
+                        {% include 'chat_box.html' %}
+
                         <!-- profile -->
                         <a href="#">
                             <img src="{{user_profile.profileimg.url}}" class="header-avatar" alt="">
@@ -516,7 +590,118 @@
     <!-- Include your new JavaScript file -->
     <script src="{% static 'post_js/real_time.js' %}"></script>
 
+    <script>
+        // Toggle visibility of message dropdown
+        document.querySelector('.header-avatar[src*="messages_icon"]').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            const dropdown = e.target.closest('a').nextElementSibling; // Target the nearest dropdown
+            dropdown.classList.toggle('show');
+        });
+    
+        // Close all dropdowns when clicking outside
+        window.addEventListener('click', function (e) {
+            const dropdowns = document.querySelectorAll('.header_dropdown');
+            dropdowns.forEach((dropdown) => {
+                if (!e.target.closest('.header-avatar') && !e.target.closest('.header_dropdown')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+    </script>
 
+    <script>
+        let currentChatUserId = null;
+    
+        function openChatWith(targetUserId, targetUsername, targetProfileImg) {
+            const chatBox = document.getElementById("chatBox");
+            const chatMessages = document.getElementById("chatMessages");
+            const chatForm = document.getElementById("chat_message_form");
+    
+            // Update chat user and UI
+            currentChatUserId = targetUserId;
+            chatBox.querySelector(".chat-profile-picture").src = targetProfileImg;
+            chatBox.querySelector(".chat-title").innerText = targetUsername;
+            chatForm.action = `/chat/${targetUserId}/`;
+    
+            // Clear old messages and fetch new ones
+            chatMessages.innerHTML = ""; // Clear existing messages
+            fetch(`/chat/${targetUserId}/`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch chat messages.");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    // Render messages in the correct order
+                    data.chat_messages.reverse().forEach((message) => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.classList.add("message");
+                        messageDiv.classList.add(message.author === data.current_user ? "message-sent" : "message-received");
+    
+                        const messageContent = document.createElement("div");
+                        messageContent.classList.add("message-content");
+                        messageContent.innerHTML = `<p>${message.body}</p>`;
+                        messageDiv.appendChild(messageContent);
+    
+                        chatMessages.appendChild(messageDiv);
+                    });
+    
+                    // Scroll to the bottom of the chat
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch((error) => console.error("Error loading chat messages:", error));
+    
+            // Show the chat box
+            chatBox.style.display = "flex";
+        }
+    
+        function closeChatBox() {
+            document.getElementById("chatBox").style.display = "none";
+            currentChatUserId = null; // Reset current user ID
+        }
+    
+        // Handle message form submission
+        document.getElementById("chat_message_form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default submission
+    
+            const messageInput = this.querySelector("input[name='body']");
+            const chatMessages = document.getElementById("chatMessages");
+            const formData = new FormData(this);
+    
+            fetch(this.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        // Append the new message to the chat box
+                        const messageDiv = document.createElement("div");
+                        messageDiv.classList.add("message", "message-sent");
+    
+                        const messageContent = document.createElement("div");
+                        messageContent.classList.add("message-content");
+                        messageContent.innerHTML = `<p>${messageInput.value}</p>`;
+                        messageDiv.appendChild(messageContent);
+    
+                        chatMessages.appendChild(messageDiv);
+    
+                        // Clear input field and scroll to the bottom
+                        messageInput.value = "";
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                })
+                .catch((error) => console.error("Error sending message:", error));
+        });
+    </script>
 
 <!-- Include Ionicons -->
 <script src="{% static 'path/to/ionicons.js' %}"></script>

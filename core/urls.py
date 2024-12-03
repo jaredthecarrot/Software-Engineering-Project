@@ -10,7 +10,11 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('logout', views.logout, name='logout'),
     path('profile', views.profile, name='profile'),
-    path('about', views.about, name='about')
+    path('about', views.about, name='about'),
+    path('send_friend_request/<int:target_user_id>/', views.send_friend_request, name='send_friend_request'),
+    path('toggle_friend/<int:target_user_id>/', views.toggle_friend, name='toggle_friend'),
+    
+    
     
 ]
 
