@@ -35,6 +35,8 @@ def index(request):
 
 @login_required(login_url='signin')
 def profile(request):
+    
+    main_user = request.user
     # Get the username from the query parameters
     username = request.GET.get('username')
     if not username:
@@ -60,7 +62,8 @@ def profile(request):
         'form': form,
         'target_user': target_user,
         'user_profile': target_user.profile,  # Assuming Profile model is related to User
-        'profile_user_id': target_user.id
+        'profile_user_id': target_user.id,
+        'main_user':main_user
     })
 
 
@@ -167,13 +170,25 @@ def send_friend_request(request, target_user_id):
         
         # Add the target user to the current user's friends list
         current_user_profile.friends.add(target_user_profile)
-        
-        # Optionally, add the current user to the target user's friends list for mutual friendship
-        target_user_profile.friends.add(current_user_profile)
-        
+                
         
         return redirect(f"/profile?username={target_username}")
     except User.DoesNotExist:
         # Handle the case where the target user does not exist
         return redirect('/')
     
+@login_required(login_url='signin')
+def toggle_friend(request, target_user_id):
+    target_user_profile = get_object_or_404(Profile, user__id=target_user_id)
+    main_user_profile = get_object_or_404(Profile, user=request.user)
+
+    # Check if the target user is already a friend
+    if target_user_profile in main_user_profile.friends.all():
+        # If they are friends, remove the friendship
+        main_user_profile.friends.remove(target_user_profile)
+    else:
+        # Otherwise, add the friendship
+        main_user_profile.friends.add(target_user_profile)
+
+    # Redirect back to the target user's profile
+    return redirect(f"/profile?username={target_user_profile.user.username}")

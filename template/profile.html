@@ -23,10 +23,16 @@
                 <span style="color: white; font-size: 27px;"><b>1.7m followers</b></span>
                 <span style="color: white; font-size: 27px;"><b>3.5k following</b></span>
 
-                <!-- Follow button to follow users -->
-                <a href="{% url 'send_friend_request' target_user.id %}">
-                    Send Friend Request
+                <!-- Follow/Unfollow button -->
+                {% if main_user.profile in target_user.profile.friends.all %}
+                <a href="{% url 'toggle_friend' target_user.id %}">
+                    Unfollow
                 </a>
+                {% else %}
+                <a href="{% url 'toggle_friend' target_user.id %}">
+                    Follow
+                </a>
+                {% endif %}
                 
                 <!-- Message Button to Open Chat Box -->
 				<a href="javascript:void(0);" onclick="openChatBox()">
