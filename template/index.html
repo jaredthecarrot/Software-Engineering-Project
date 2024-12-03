@@ -44,14 +44,14 @@
                                 </button>
                             </form>
                             {% if query %}
-                            <div class="lg:w-5/12 ml-auto">
+                            <div class="-left-5">
                                 <div class="bg-white shadow-md rounded-md overflow-hidden">
                                     <!-- Search Results Header -->
                                     <div class="bg-gray-50 border-b border-gray-100 flex items-baseline justify-between py-4 px-6">
                                         <h2 class="font-semibold text-lg">Search Results for "{{ query }}"</h2>
                                     </div>
                                     <!-- Search Results Content -->
-                                    <div class="divide-gray-300 divide-gray-50 divide-opacity-50 divide-y px-4">
+                                    <div class="divide-gray-300 divide-gray-50 divide-opacity-50 divide-y px-10">
                                         {% for user in results %}
                                         <div class="flex items-center justify-between py-3">
                                             <!-- User Info -->
@@ -84,6 +84,7 @@
                         </div>                        
 
                     </div>
+
                     <div class="right-side lg:pr-4">
                          <!-- upload -->
                         <a href="#"
