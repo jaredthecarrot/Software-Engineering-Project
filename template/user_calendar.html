@@ -32,7 +32,14 @@
             margin-bottom: 30px;
         }
 
-        .create-event-btn {
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Add spacing between buttons */
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
             text-decoration: none;
             background-color: #800000; /* Maroon color */
             color: white;
@@ -41,11 +48,10 @@
             font-size: 16px;
             font-weight: bold;
             transition: background-color 0.3s ease;
-            margin-bottom: 20px;
             display: inline-block;
         }
 
-        .create-event-btn:hover {
+        .action-btn:hover {
             background-color: #660000;
         }
 
@@ -102,13 +108,19 @@
             text-align: center;
             margin-top: 20px;
         }
-
     </style>
 </head>
-<body>
+<body>  
     <div class="container">
-        <a href="{% url 'create_event' %}" class="create-event-btn">Create Event</a>
-        <h1>Your Calendar</h1>
+        <!-- Navigation Buttons -->
+        <div class="button-container">
+            <a href="http://127.0.0.1:8000" class="action-btn">Go Back to Home Page</a>
+            <a href="{% url 'create_event' %}" class="action-btn">Create Event</a>
+        </div>
+
+        <h1>Your Personal Calendar</h1>
+
+        <!-- Event Table -->
         <table>
             <thead>
                 <tr>
@@ -116,7 +128,7 @@
                     <th>Description</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Actions</th>  <!-- Add an "Actions" column -->
+                    <th>Actions</th> <!-- Add an "Actions" column -->
                 </tr>
             </thead>
             <tbody>
@@ -137,7 +149,7 @@
                 {% endfor %}
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="no-events">No events available.</td>
+                    <td colspan="5" class="no-events">No events available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
