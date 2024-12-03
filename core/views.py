@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Profile, User
+from .models import Profile, User, UserStats
 from posts.models import Post, LikePost
 from django.shortcuts import render, get_object_or_404
 from messagingFeature.models import ChatChannel, ChatMessage
@@ -61,6 +61,15 @@ def profile(request):
         'user_profile': target_user.profile,  # Assuming Profile model is related to User
         'profile_user_id': target_user.id
     })
+
+def profile_view(request):
+    stats = UserStats.objects.get(user=request.user)
+    context = {
+        'posts': stats.posts_count,
+        'followers': f"{stats.followers_count / 1_000_000:.1f}m" if stats.followers_count >= 1_000_000 else stats.followers_count,
+        'following': f"{stats.following_count / 1_000:.1f}k" if stats.following_count >= 1_000 else stats.following_count,
+    }
+    return render(request, 'profile.html', context)
 
 
 @login_required(login_url='signin')
@@ -124,6 +133,7 @@ def settings(request):
             user_profile.location = location
             user_profile.theme = theme
             user_profile.save()
+            print('hello')
 
             # Success message
             messages.success(request, 'Your profile has been updated successfully.')
@@ -141,7 +151,7 @@ def settings(request):
 def profile_update(request):
     if request.method == 'POST':
         try:
-            # Code for updating profile, e.g., updating user details
+            # Existing code for updating profile details
             profile_image = request.FILES.get('image')
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
@@ -188,8 +198,22 @@ def profile_update(request):
             messages.error(request, 'An error occurred. Please try again.')
             print(e)  # Optional: Print the error to console for debugging
             return redirect('profile_update')
+
+    # Fetch profile stats for display
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    posts_count = user.posts.count()  # Adjust based on how posts are related to the user
+    followers_count = profile.followers_count  # Assume this is a field in Profile
+    following_count = profile.following_count  # Assume this is a field in Profile
+
+    context = {
+        'profile': profile,
+        'posts_count': posts_count,
+        'followers_count': followers_count,
+        'following_count': following_count,
+    }
     
-    return render(request, 'profile_update.html')
+    return render(request, 'profile_update.html', context)
     
 def signup(request):
     
