@@ -99,12 +99,12 @@ def settings(request):
             age = request.POST.get('age')
             email = request.POST.get('email')
             phone = request.POST.get('phone')
-            bio = request.POST.get('bio')
-            location = request.POST.get('location')
+            bio = request.POST.get('bio') or ''
+            location = request.POST.get('location') or ''
             theme = request.POST.get('theme')
 
             # Validate unique email if it's being changed
-            if User.objects.filter(email=email).exclude(username=user_profile.username).exists():
+            if User.objects.filter(email=email).exclude(username=user_profile.user).exists():
                 messages.error(request, 'This email is already associated with another account.')
                 return redirect('settings')
 
@@ -113,7 +113,7 @@ def settings(request):
             user_profile.save()
 
             # Update Profile with new data
-            user_profile.profileimg = user_profile.image
+            user_profile.profileimg = user_profile.profileimg
             user_profile.first_name = first_name
             user_profile.last_name = last_name
             user_profile.gender = gender
@@ -127,15 +127,15 @@ def settings(request):
 
             # Success message
             messages.success(request, 'Your profile has been updated successfully.')
-            return redirect('settings')
+            # return redirect('settings')
+            return render(request,'setting.html', {'user_profile': user_profile})
         
     except Exception as e:
             # Error message
             messages.error(request, 'An error occurred. Please try again.')
-            print(e)  # Optional: Print the error to console for debugging
-            return redirect('settings')
+            return render(request, 'setting.html', {'user_profile': user_profile})
     
-    return render(request,'setting.html', {'user_profile': user_profile})
+    # return render(request,'setting.html', {'user_profile': user_profile})
 
 @login_required(login_url='signin')
 def profile_update(request):
