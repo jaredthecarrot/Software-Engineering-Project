@@ -68,25 +68,44 @@
                         <input type="text" placeholder="First Name"  class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
                         <input type="text" placeholder="Last Name" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
                     </div>-->
-                    <input type="text" name="username" placeholder="Username" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <input type="email" name="email" placeholder="Email" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <input type="password" name = "password" placeholder="Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <input type="password" name = "password2" placeholder="Confirm Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
-                    <div class="flex justify-start my-4 space-x-1">
-                        
+                    <input type="text" name="username" placeholder="Username" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                    <input type="email" name="email" placeholder="Email" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                    <input type="password" name="password" placeholder="Password" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                    <input type="password" name="password2" placeholder="Confirm Password" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                
+                    <!-- Account Type Selection -->
+                    <div>
+                        <label>
+                            <input type="radio" name="account_type" value="regular" checked>
+                            Student Account
+                        </label>
+                        <label>
+                            <input type="radio" name="account_type" value="organization">
+                            Organization Account
+                        </label>
+                    </div>
+                
+                    <!-- Organization-Specific Fields -->
+                    <div id="organization-fields" style="display: none; margin-top: 20px;">
+                        <input type="text" name="organization_name" placeholder="Organization Title" 
+                               class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" 
+                               style="border: 1px solid #d3d5d8 !important; width: 100%;">
+                    </div>
                        <!--- <div class="checkbox">
                             <input type="checkbox" id="chekcbox1" checked>
                             <label for="chekcbox1"><span class="checkbox-icon"></span> I Agree</label>
                         </div>
                         <a href="#"> Terms and Conditions</a>
                     </div> -->
+                    <!-- Sign-Up Button -->
                     <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Sign Up</button>
-                    <div class="text-center mt-5 space-x-2">
-                        <p class="text-base"> Do you have an account? <a href="/signin"> Signin </a></p>
-                    </div>
                 </form>
+                <div class="text-center mt-5 space-x-2">
+                    <p class="text-base"> Do you have an account? <a href="/signin">Signin</a></p>
+                </div>
             </div>
         </div>
+
         
         <!-- Footer -->
 
@@ -101,6 +120,23 @@
 
     </div>
 
+    <!-- JavaScript to Toggle Organization Fields -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accountTypeInputs = document.querySelectorAll('input[name="account_type"]');
+            const orgFields = document.getElementById('organization-fields');
+            
+            accountTypeInputs.forEach(input => {
+                input.addEventListener('change', function () {
+                    if (this.value === 'organization') {
+                        orgFields.style.display = 'block'; // Show the field
+                    } else {
+                        orgFields.style.display = 'none'; // Hide the field
+                    }
+                });
+            });
+        });
+    </script>
     <!--<script>
         
         (function (window, document, undefined) {
