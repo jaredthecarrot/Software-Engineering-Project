@@ -35,6 +35,5 @@ def discussions_view(request):
     return render(request, 'discussions.html', {
         'threads': threads,
         'thread_form': thread_form,
-        'reply_form': ReplyForm(),  # Initialize a new reply form for use in the template
+        'reply_form': reply_form,  # Pass the correct reply_form here
     })
-
