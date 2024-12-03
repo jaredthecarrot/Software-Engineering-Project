@@ -19,6 +19,9 @@ def index(request):
     # Fetch all posts with related user data
     posts = Post.objects.all().select_related('user')
     
+    #makea list of all profiles 
+    all_profiles = Profile.objects.exclude(user=request.user)
+    
     # Add likes and the profiles of users who liked each post
     for post in posts:
          # Check if the current user has liked the post
@@ -30,7 +33,7 @@ def index(request):
     # Get the list of friends
     friends = user_profile.friends.all()
     
-    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends})
+    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends, 'profiles':all_profiles})
 
 
 @login_required(login_url='signin')
@@ -48,6 +51,7 @@ def profile(request):
     chat_messages = chat_channel.chat_messages.all()[:30]
     form = ChatmessageCreateForm()
     
+    
     if request.method == 'POST':
         form = ChatmessageCreateForm(request.POST)
         if form.is_valid():
@@ -63,7 +67,8 @@ def profile(request):
         'target_user': target_user,
         'user_profile': target_user.profile,  # Assuming Profile model is related to User
         'profile_user_id': target_user.id,
-        'main_user':main_user
+        'main_user':main_user,
+
     })
 
 
@@ -192,3 +197,8 @@ def toggle_friend(request, target_user_id):
 
     # Redirect back to the target user's profile
     return redirect(f"/profile?username={target_user_profile.user.username}")
+
+def users_to_follow(request):
+    # Exclude the logged-in user from the list (if applicable)
+    all_profiles = Profile.objects.exclude(user=request.user)
+    return render(request, 'users_to_follow.html', {'profiles': all_profiles})
