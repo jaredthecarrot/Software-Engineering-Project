@@ -10040,7 +10040,10 @@ aside.sidebar.full-style {
     text-transform: uppercase;
 }
 
-/* Chat Box Container */
+
+
+/* chat box styles */
+
 .chat-box-container {
     position: fixed;
     bottom: 10px;
@@ -10057,7 +10060,6 @@ aside.sidebar.full-style {
     display: none;
 }
 
-/* Chat Header */
 .chat-header {
     display: flex;
     align-items: center;
@@ -10088,7 +10090,6 @@ aside.sidebar.full-style {
     cursor: pointer;
 }
 
-/* Chat Messages */
 .chat-messages {
     flex-grow: 1;
     padding: 1rem;
@@ -10111,7 +10112,6 @@ aside.sidebar.full-style {
     width: fit-content;
 }
 
-/* Align message-sent to the right edge */
 .message-sent {
     align-self: flex-end;
     background-color: #722222;
@@ -10120,7 +10120,6 @@ aside.sidebar.full-style {
     text-align: left;
 }
 
-/* Align message-received to the left edge */
 .message-received {
     align-self: flex-start;
     background-color: #e2e8f0;
@@ -10129,27 +10128,6 @@ aside.sidebar.full-style {
     text-align: left;
 }
 
-.message-profile-picture {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-/* Message Content */
-.message-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.message-content p {
-    margin: 0;
-    display: inline;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-/* Timestamp outside the bubble */
 .message-time {
     font-size: 0.7rem;
     color: #888;
@@ -10157,16 +10135,6 @@ aside.sidebar.full-style {
     text-align: right;
 }
 
-/* Adjust timestamp alignment for sent and received messages */
-.message-sent + .message-time {
-    align-self: flex-end;
-}
-
-.message-received + .message-time {
-    align-self: flex-start;
-}
-
-/* Chat Input Area */
 .chat-input {
     display: flex;
     padding: 0.5rem 1rem;
@@ -10175,34 +10143,10 @@ aside.sidebar.full-style {
     align-items: center;
 }
 
-/* Extra buttons inside input (e.g., for adding attachments or emojis) */
-.extra-button {
-    background-color: #ffffff;
-    color: #888;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-/* Style for the form inside the chat input area */
-.chat-input form {
-    display: flex;
-    width: 100%;
-    align-items: center;
-}
-
-/* Style for the input field */
 .chat-input input[type="text"] {
     flex-grow: 1;
-    padding: 8px 15px; /* Smaller padding for compact look */
-    font-size: 0.9rem; /* Slightly smaller font size */
+    padding: 8px 15px;
+    font-size: 0.9rem;
     background-color: #ffffff;
     color: #333333;
     border: 1px solid #ddd;
@@ -10212,7 +10156,6 @@ aside.sidebar.full-style {
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Send button */
 .send-button {
     background-color: #722222;
     color: #ffffff;

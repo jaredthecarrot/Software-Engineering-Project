@@ -26,11 +26,17 @@ def index(request):
         
         # Add a list of users who liked this post (limit to last 3)
         post.liked_users = LikePost.objects.filter(post_id=post.id).select_related('user')[:3]
-    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts})
+    
+    # Get the list of friends
+    friends = user_profile.friends.all()
+    
+    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends})
 
 
 @login_required(login_url='signin')
 def profile(request):
+    
+    main_user = request.user
     # Get the username from the query parameters
     username = request.GET.get('username')
     if not username:
@@ -56,7 +62,8 @@ def profile(request):
         'form': form,
         'target_user': target_user,
         'user_profile': target_user.profile,  # Assuming Profile model is related to User
-        'profile_user_id': target_user.id
+        'profile_user_id': target_user.id,
+        'main_user':main_user
     })
 
 
@@ -150,4 +157,38 @@ def logout(request):
 
 def about(request):
     return render(request,'about.html')
+
+@login_required(login_url='signin')
+def send_friend_request(request, target_user_id):
+    try:
+        target_user = User.objects.get(id=target_user_id)
+        target_username = target_user.username
+        # Logic to handle the friend request goes here
+        # Get the profiles of the current user and the target user
+        current_user_profile = get_object_or_404(Profile, user=request.user)
+        target_user_profile = get_object_or_404(Profile, user__id=target_user_id)
+        
+        # Add the target user to the current user's friends list
+        current_user_profile.friends.add(target_user_profile)
+                
+        
+        return redirect(f"/profile?username={target_username}")
+    except User.DoesNotExist:
+        # Handle the case where the target user does not exist
+        return redirect('/')
     
+@login_required(login_url='signin')
+def toggle_friend(request, target_user_id):
+    target_user_profile = get_object_or_404(Profile, user__id=target_user_id)
+    main_user_profile = get_object_or_404(Profile, user=request.user)
+
+    # Check if the target user is already a friend
+    if target_user_profile in main_user_profile.friends.all():
+        # If they are friends, remove the friendship
+        main_user_profile.friends.remove(target_user_profile)
+    else:
+        # Otherwise, add the friendship
+        main_user_profile.friends.add(target_user_profile)
+
+    # Redirect back to the target user's profile
+    return redirect(f"/profile?username={target_user_profile.user.username}")

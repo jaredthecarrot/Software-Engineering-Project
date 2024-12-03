@@ -27,6 +27,21 @@ def chat_view(request, user_id):
             # Fallback to redirect for non-AJAX POST requests
             return redirect('chat_view', user_id=user_id)
 
+    # Handle AJAX GET requests for chat messages
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        messages_data = [
+            {
+                "author": message.author.id,
+                "body": message.body,
+                "created": message.created.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            for message in chat_messages
+        ]
+        return JsonResponse({
+            "chat_messages": messages_data,
+            "current_user": request.user.id
+        })
+
     return render(request, 'profile.html', {
         'chat_messages': chat_messages,
         'form': form,
