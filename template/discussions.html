@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Board</title>
+    <style>
+        body {
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #800000; /* Maroon color */
+            margin-top: 40px;
+            font-size: 2.5rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #800000; /* Maroon color */
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #800000; /* Maroon color */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #660000; /* Darker maroon */
+        }
+        .home-button {
+            display: block;
+            margin: 20px auto; /* Center the button */
+            background-color: #800000; /* Maroon color */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+            width: 200px; /* Adjust button size */
+        }
+        .home-button:hover {
+            background-color: #660000; /* Darker maroon */
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            background-color: #f1f1f1;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #800000; /* Maroon color */
+        }
+        .thread-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .thread-content {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+        .posted-by {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            margin-top: 15px;
+        }
+        .reply-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            resize: vertical;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            // Restore the scroll position after the page reloads
+            const scrollPosition = localStorage.getItem('scrollPosition');
+            if (scrollPosition) {
+                window.scrollTo(0, scrollPosition);  // Scroll to the previous position
+            }
+        };
+
+        window.onbeforeunload = function() {
+            // Save the scroll position before the page reloads
+            localStorage.setItem('scrollPosition', window.scrollY);
+        };
+    </script>
+</head>
+<body>
+    <h1>Discussion Board</h1>
+
+    <!-- Return to Home Button -->
+    <a href="/" class="home-button">Return to Home</a>
+
+    <div class="container">
+        <h2>Create a New Thread</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ thread_form.as_p }}
+            <button type="submit">Create Thread</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Threads</h2>
+        {% if threads %}
+            <ul>
+                {% for thread in threads %}
+                    <li>
+                        <p class="thread-title">{{ thread.title }}</p>
+                        <p class="thread-content">{{ thread.content }}</p>
+                        <p class="posted-by">Posted by: {{ thread.author.username }} on {{ thread.created_at }}</p>
+
+                        <p><strong>Replies:</strong></p>
+                        <ul>
+                            {% for reply in thread.replies.all %}
+                                <li>{{ reply.author.username }}: {{ reply.content }}</li>
+                            {% empty %}
+                                <li>No replies yet.</li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="reply-form">
+                            <form method="post" action="{% url 'discussions_view' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="reply_thread_id" value="{{ thread.id }}">
+                                {{ reply_form.as_p }}
+                                <button type="submit">Reply</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No threads available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - {{username}}</title>
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+	
+</head>
+<body>
+<div class="theme-layout"></div>
+<section>
+    <div class="feature-photo">
+        <figure><img src="{% static 'images/resources/timeline-1.jpg' %}" alt=""></figure>
+        <form>
+            <div class="add-btn">
+                <span style="color: white; font-size: 27px; margin-right: 520px;"><b><u><a href="/">Home</a></u></b></span>
+                <span style="color: white; font-size: 27px;"><b>11 Post</b></span>
+                <span style="color: white; font-size: 27px;"><b>1.7m followers</b></span>
+                <span style="color: white; font-size: 27px;"><b>3.5k following</b></span>
+
+                <!-- Follow/Unfollow button -->
+                {% if main_user.profile in target_user.profile.friends.all %}
+                <a href="{% url 'toggle_friend' target_user.id %}">
+                    Unfollow
+                </a>
+                {% else %}
+                <a href="{% url 'toggle_friend' target_user.id %}">
+                    Follow
+                </a>
+                {% endif %}
+                
+                <!-- Message Button to Open Chat Box -->
+				<a href="javascript:void(0);" onclick="openChatBox()">
+					Message
+				</a>
+                
+            </div>
+        </form>
+        <div class="container-fluid" style="position: absolute; left: 50px; top: 200px;">
+            <div class="row merged">
+                <div class="col-lg-2 col-sm-3">
+                    <div class="user-avatar">
+                        <figure>
+                            <img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
+                            <form class="edit-phto">
+                                <i class="fa fa-camera-retro"></i>
+                                <label class="fileContainer">
+                                    <a href="#account-settings">Upload Profile Photo</a>
+                                </label>
+                            </form>
+                        </figure>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-sm-9">
+                    <div class="timeline-info">
+                        <ul>
+                            <li class="admin-name">
+                                <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>@{{ user_profile.user.username }}</h5>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="bio">
+        {{user_profile.bio}}
+    </div>
+</section>
+
+<section>
+    <div class="gap gray-bg">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row" id="page-contents">
+                        <div class="col-lg-3">
+                            <aside class="sidebar static"></aside>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="central-meta">
+                                <ul class="photos">
+                                    <li><a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+                                        <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <aside class="sidebar static"></aside>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+	</div>    
+</section>
+
+<!-- Chat Box -->
+<div id="chatBox" class="chat-box-container">
+    <div class="chat-header">
+        <img src="{{ target_user.profile.profileimg.url }}" alt="Profile Picture" class="chat-profile-picture">
+        <span class="chat-title">{{ target_user.username }}</span>
+        <button class="close-chat" onclick="closeChatBox()">✕</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        {% for message in chat_messages reversed %}
+            <div class="message {% if message.author == user %}message-sent{% else %}message-received{% endif %}">
+                <div class="message-content">
+                    <p>{{ message.body }}</p>
+                </div>
+            </div>
+            <span class="message-time">{{ message.created|date:"H:i A" }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="chat-input">
+        <form id="chat_message_form" method="POST" action="{% url 'chat_view' target_user.id %}">
+            {% csrf_token %}
+            <input type="text" name="body" placeholder="Type your message..." class="chat-textarea" required>
+            <button type="submit" class="send-button">➤</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openChatBox() {
+        const chatBox = document.getElementById("chatBox");
+        const chatMessages = document.getElementById("chatMessages");
+
+        // Display the chat box
+        chatBox.style.display = "flex";
+
+        // Scroll to the bottom of the messages container
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function closeChatBox() {
+        document.getElementById("chatBox").style.display = "none";
+    }
+
+    document.getElementById("chat_message_form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const messageInput = this.querySelector("input[name='body']");
+        const chatMessages = document.getElementById("chatMessages");
+        const formData = new FormData(this);
+
+        fetch(this.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Append the new message to the chat box
+                    const messageDiv = document.createElement("div");
+                    messageDiv.classList.add("message", "message-sent");
+
+                    const messageContent = document.createElement("div");
+                    messageContent.classList.add("message-content");
+                    messageContent.innerHTML = `<p>${messageInput.value}</p>`;
+                    messageDiv.appendChild(messageContent);
+
+                    chatMessages.appendChild(messageDiv);
+
+                    // Clear input field and scroll to the bottom
+                    messageInput.value = "";
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            })
+            .catch((error) => console.error("Error sending message:", error));
+    });
+
+    // Automatically scroll to the bottom when the page loads
+    window.onload = function () {
+        const chatMessages = document.getElementById("chatMessages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+</script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
