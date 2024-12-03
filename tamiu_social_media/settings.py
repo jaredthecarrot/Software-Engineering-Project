@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'posts',
     'core',
     'discussions',
-    'messagingFeature'
-    
-    
+    'messagingFeature',
+    'swingtime',
+    'calendarapp'
 ]
 
 MIDDLEWARE = [
