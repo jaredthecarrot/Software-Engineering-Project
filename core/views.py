@@ -30,7 +30,10 @@ def index(request):
     # Get the list of friends
     friends = user_profile.friends.all()
     
-    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends})
+     #makea list of all profiles 
+    all_profiles = Profile.objects.exclude(user=request.user)
+    
+    return render(request,'index.html', {'user_profile': user_profile, 'posts':posts, 'friends':friends, 'profiles':all_profiles})
 
 
 @login_required(login_url='signin')
